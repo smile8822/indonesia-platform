@@ -1,6 +1,4 @@
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -40,6 +38,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
+  cursor: pointer;
 }
 
 .logo {
@@ -53,16 +52,8 @@ body {
   box-shadow: 0 0 30px rgba(0,180,255,.55);
 }
 
-.brand h1 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.brand p {
-  margin: 2px 0 0;
-  color: #b8c7da;
-  font-size: 13px;
-}
+.brand h1 { margin: 0; font-size: 24px; }
+.brand p { margin: 2px 0 0; color: #b8c7da; font-size: 13px; }
 
 .langs {
   display: flex;
@@ -76,11 +67,10 @@ body {
   color: white;
   border: 0;
   padding: 12px 22px;
+  cursor: pointer;
 }
 
-.langs .active {
-  background: #2364ff;
-}
+.langs .active { background: #2364ff; }
 
 .hero {
   position: relative;
@@ -135,12 +125,15 @@ body {
   margin-top: 34px;
 }
 
-.heroButtons button {
-  height: 72px;
+.heroButtons button,
+.primary,
+.secondary {
+  min-height: 64px;
   border-radius: 20px;
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 900;
   cursor: pointer;
+  padding: 0 20px;
 }
 
 .primary {
@@ -226,7 +219,9 @@ body {
 .flow,
 .why,
 .chain,
-.cta {
+.cta,
+.authBox,
+.dashboard {
   border-radius: 30px;
   padding: 32px;
   background: rgba(255,255,255,.045);
@@ -257,8 +252,10 @@ body {
 }
 
 .liveItem {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: center;
   padding: 18px 22px;
   margin-top: 12px;
   border-radius: 18px;
@@ -271,20 +268,33 @@ body {
   font-weight: 900;
 }
 
+.liveItem small {
+  color: #7f8da3;
+  font-weight: 800;
+}
+
 .green { color: #39ff9f; }
 .blue { color: #40dfff; }
 .purple { color: #c07bff; }
 .orange { color: #ffbd59; }
 
-.flow {
+.flow,
+.services,
+.why,
+.chain,
+.cta {
   position: relative;
   z-index: 2;
   margin-top: 28px;
 }
 
-.flow p {
+.flow p,
+.chain p,
+.trustMini p,
+.dashboard p {
   color: #cbd8ea;
   font-size: 18px;
+  line-height: 1.7;
 }
 
 .flowGrid {
@@ -314,12 +324,6 @@ body {
   box-shadow: 0 0 30px rgba(0,220,255,.25);
 }
 
-.services {
-  position: relative;
-  z-index: 2;
-  margin-top: 28px;
-}
-
 .serviceGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -333,6 +337,7 @@ body {
   background: rgba(255,255,255,.045);
   border: 1px solid rgba(255,255,255,.12);
   transition: .3s;
+  cursor: pointer;
 }
 
 .serviceCard:hover {
@@ -341,29 +346,12 @@ body {
   box-shadow: 0 20px 45px rgba(0,220,255,.15);
 }
 
-.serviceIcon {
-  font-size: 44px;
-  margin-bottom: 18px;
-}
-
-.serviceCard strong {
-  font-size: 19px;
-}
-
-.serviceCard p {
-  color: #9fb2c8;
-}
-
-.serviceCard span {
-  float: right;
-  color: #43e8ff;
-  font-size: 24px;
-}
+.serviceIcon { font-size: 44px; margin-bottom: 18px; }
+.serviceCard strong { font-size: 19px; }
+.serviceCard p { color: #9fb2c8; }
+.serviceCard span { float: right; color: #43e8ff; font-size: 24px; }
 
 .why {
-  position: relative;
-  z-index: 2;
-  margin-top: 28px;
   background: linear-gradient(135deg, rgba(0,220,255,.08), rgba(130,70,255,.08));
 }
 
@@ -380,30 +368,14 @@ body {
   border: 1px solid rgba(255,255,255,.1);
 }
 
-.whyCard b {
-  color: #43e8ff;
-  font-size: 20px;
-}
-
-.whyCard p {
-  color: #d6e3f5;
-  line-height: 1.6;
-}
+.whyCard b { color: #43e8ff; font-size: 20px; }
+.whyCard p { color: #d6e3f5; line-height: 1.6; }
 
 .chain {
-  position: relative;
-  z-index: 2;
-  margin-top: 28px;
   display: grid;
   grid-template-columns: 1.3fr .7fr;
   gap: 28px;
   border-color: rgba(190,100,255,.35);
-}
-
-.chain p {
-  color: #d6e3f5;
-  font-size: 18px;
-  line-height: 1.7;
 }
 
 .chainCards {
@@ -422,16 +394,11 @@ body {
 }
 
 .cta {
-  position: relative;
-  z-index: 2;
-  margin-top: 28px;
   text-align: center;
   background: linear-gradient(90deg, rgba(30,90,255,.22), rgba(0,220,210,.22));
 }
 
-.cta h3 {
-  font-size: 42px;
-}
+.cta h3 { font-size: 42px; }
 
 .cta button {
   margin-top: 10px;
@@ -442,7 +409,149 @@ body {
   color: white;
   font-size: 20px;
   font-weight: 900;
+  cursor: pointer;
 }
+
+.authApp { min-height: 100vh; }
+
+.authBox {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+  margin: 60px auto;
+  border-color: rgba(0,220,255,.28);
+  box-shadow: 0 30px 80px rgba(0,0,0,.45);
+  text-align: center;
+}
+
+.backBtn {
+  background: transparent;
+  color: #b9c8dc;
+  border: 0;
+  font-weight: 900;
+  cursor: pointer;
+  margin-bottom: 18px;
+}
+
+.authIcon {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+  background: linear-gradient(135deg, rgba(35,100,255,.4), rgba(150,90,255,.35));
+  box-shadow: 0 0 35px rgba(80,140,255,.45);
+}
+
+.authBox h2 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.authBox p { color: #9fb2c8; margin-bottom: 28px; }
+
+.authBox input {
+  width: 100%;
+  height: 58px;
+  margin-bottom: 14px;
+  padding: 0 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.13);
+  background: rgba(0,0,0,.26);
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.authMain {
+  width: 100%;
+  height: 62px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #245cff, #00d7d7);
+  color: white;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.authSwitch {
+  margin-top: 22px;
+  color: #43e8ff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dashboard {
+  position: relative;
+  z-index: 2;
+  margin: 60px auto;
+  border-color: rgba(0,220,255,.28);
+}
+
+.dashboard h2 {
+  margin: 0 0 12px;
+  font-size: 42px;
+  font-weight: 900;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin: 32px 0;
+}
+
+.dashboardGrid div {
+  min-height: 150px;
+  border-radius: 24px;
+  padding: 24px;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.12);
+  font-size: 34px;
+}
+
+.dashboardGrid strong {
+  display: block;
+  font-size: 20px;
+  margin-top: 14px;
+}
+
+.dashboardGrid span {
+  display: block;
+  color: #43e8ff;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.wide {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.passportBox { max-width: 600px; }
+
+.uploadBox {
+  width: 100%;
+  min-height: 180px;
+  border-radius: 24px;
+  border: 2px dashed rgba(67,232,255,.45);
+  background: rgba(0,220,255,.06);
+  display: grid;
+  place-items: center;
+  padding: 30px;
+  margin: 24px 0;
+  cursor: pointer;
+}
+
+.uploadBox input { display: none; }
+.uploadBox strong { font-size: 22px; color: #43e8ff; }
+.uploadBox span { color: #9fb2c8; }
 
 footer {
   position: relative;
@@ -452,13 +561,8 @@ footer {
   color: #7f8da3;
 }
 
-@keyframes blink {
-  50% { opacity: .35; }
-}
-
-@keyframes pulse {
-  50% { filter: brightness(1.25); }
-}
+@keyframes blink { 50% { opacity: .35; } }
+@keyframes pulse { 50% { filter: brightness(1.25); } }
 
 @media (max-width: 900px) {
   .hero,
@@ -467,13 +571,18 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .hero {
+    padding: 30px;
+  }
+
   .hero h2 {
     font-size: 42px;
   }
 
   .serviceGrid,
   .flowGrid,
-  .whyGrid {
+  .whyGrid,
+  .dashboardGrid {
     grid-template-columns: 1fr;
   }
 
@@ -484,4 +593,25 @@ footer {
   .langs {
     display: none;
   }
+
+  .orbit {
+    width: 300px;
+    height: 300px;
+  }
+
+  .earth {
+    font-size: 110px;
+  }
+
+  .orbitIcon {
+    width: 58px;
+    height: 58px;
+    font-size: 26px;
+  }
+
+  .icon0 { top: 0; left: 120px; }
+  .icon1 { top: 90px; right: -10px; }
+  .icon2 { bottom: 25px; right: 30px; }
+  .icon3 { bottom: 25px; left: 30px; }
+  .icon4 { top: 90px; left: -10px; }
 }
