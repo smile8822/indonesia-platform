@@ -1,294 +1,273 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 const LANGS = ["KR", "ID", "EN", "CN"];
 
-const TEXT = {
+const COPY = {
   KR: {
-    badge: "AI 자동 처리 플랫폼",
-    hero1: "AI가 인도네시아",
-    hero2: "입국부터 정착까지",
-    hero3: "자동으로 처리합니다",
-    desc: "여권 하나로 비자 · 세관 · 환전 · 픽업 · 차량 · 숙소까지 모든 절차가 자동 진행됩니다.",
+    navStart: "시작하기",
+    navLogin: "로그인",
+    heroLine1: "여권 하나만 올리세요.",
+    heroLine2: "AI가 입국부터 정착까지",
+    heroLine3: "전부 처리합니다.",
+    heroDesc:
+      "비자 · 세관신고 · 환전 · 공항픽업 · 차량 · 숙소 · 장기체류까지 신청부터 진행확인까지 자동으로 연결됩니다.",
     start: "여권으로 시작하기",
-    join: "회원가입 / 로그인",
-    live: "실시간 진행 상황",
-    operating: "실시간 처리 중",
-    processingTitle: "지금도 시스템이 처리 중입니다",
-    processingDesc: "신청, 결제, 승인, 배정 기록은 마이페이지에서 실시간으로 확인됩니다.",
-    flow: "AI 자동 처리 흐름",
-    flowDesc: "여권 정보만 입력하면 AI가 필요한 절차를 자동으로 연결합니다.",
-    services: "서비스 바로가기",
-    why: "왜 이 플랫폼을 사용하는가",
-    chain: "모든 기록은 위변조가 불가능한 방식으로 저장됩니다",
-    chainDesc: "신청 기록 · 결제 기록 · 비자 승인 기록은 신뢰 가능한 방식으로 보관되며 사용자 요청 또는 1년 경과 시 자동 삭제됩니다.",
-    cta: "지금 시작하면 모든 절차가 자동으로 진행됩니다",
-    kakao: "KakaoTalk 상담",
-    whatsapp: "WhatsApp 상담",
-    footer: "© 2025 SMILE AI Indonesia Platform. All rights reserved.",
-    signup: "회원가입",
+    join: "회원가입",
     login: "로그인",
-    dashboard: "회원 대시보드",
-    passport: "여권 업로드",
-    backHome: "홈으로 돌아가기",
-    backDashboard: "대시보드로 돌아가기",
+    whatsapp: "WhatsApp 상담",
+    kakao: "KakaoTalk 상담",
+    liveTitle: "AI 자동 처리 현황",
+    liveSub: "사용자는 확인만 하면 됩니다",
+    today: "오늘 자동 처리",
+    active: "현재 진행중",
+    automation: "자동 연결률",
+    avg: "평균 처리 시간",
+    flowTitle: "AI가 자동으로 연결하는 전체 흐름",
+    flowDesc: "여권 업로드 후 AI가 필요한 절차를 판단하고 순서대로 실행합니다.",
+    services: "자동 처리 서비스",
+    why: "왜 이 플랫폼을 사용하는가",
+    trust: "기록은 남고, 조작은 불가능하게",
+    trustDesc:
+      "신청 기록 · 결제 기록 · 승인 기록은 신뢰 가능한 방식으로 보관되며 사용자 요청 또는 1년 경과 시 자동 삭제됩니다.",
+    cta: "당신은 아무것도 할 필요 없습니다.",
+    ctaDesc: "여권만 업로드하면 AI가 필요한 절차를 자동으로 시작합니다.",
+    signupTitle: "회원가입",
+    loginTitle: "로그인",
     name: "이름",
     email: "이메일",
     phone: "전화번호",
     password: "비밀번호",
-    signupBtn: "가입하고 시작하기",
-    loginBtn: "로그인하기",
-    uploadDesc: "여권 사진을 업로드하면 AI가 정보를 분석하고 필요한 절차를 자동으로 연결합니다.",
-    uploadFile: "여권 파일 업로드",
+    signupButton: "가입하고 대시보드로 이동",
+    loginButton: "로그인하고 대시보드로 이동",
+    toLogin: "이미 계정이 있나요? 로그인",
+    toSignup: "계정이 없나요? 회원가입",
+    dashboard: "회원 대시보드",
+    dashboardDesc: "모든 신청, 결제, 진행상황은 여기서 실행됩니다.",
+    uploadPassport: "여권 업로드 시작",
+    passportTitle: "여권 업로드",
+    passportDesc:
+      "여권 이미지 또는 PDF를 업로드하면 AI가 정보를 분석하고 필요한 절차를 자동으로 연결합니다.",
+    uploadFile: "여권 파일 선택",
     fileType: "이미지 또는 PDF 가능",
     analyze: "AI 분석 시작하기",
+    back: "돌아가기",
+    home: "홈으로",
   },
   ID: {
-    badge: "Platform Diproses AI",
-    hero1: "AI mengurus",
-    hero2: "masuk hingga menetap",
-    hero3: "di Indonesia",
-    desc: "Dengan satu paspor, visa · bea cukai · penukaran uang · pickup · mobil · akomodasi berjalan otomatis.",
+    navStart: "Mulai",
+    navLogin: "Masuk",
+    heroLine1: "Upload paspor saja.",
+    heroLine2: "AI mengurus masuk sampai menetap",
+    heroLine3: "semuanya otomatis.",
+    heroDesc:
+      "Visa · bea cukai · penukaran uang · pickup bandara · mobil · akomodasi · tinggal lama terhubung otomatis dari pengajuan hingga pengecekan status.",
     start: "Mulai dengan Paspor",
-    join: "Daftar / Masuk",
-    live: "Status Real-time",
-    operating: "Sedang Diproses",
-    processingTitle: "Sistem sedang memproses",
-    processingDesc: "Pengajuan, pembayaran, persetujuan, dan penugasan dapat dicek real-time di halaman saya.",
-    flow: "Alur Otomatis AI",
-    flowDesc: "Masukkan data paspor, AI akan menghubungkan semua proses yang dibutuhkan.",
-    services: "Layanan Cepat",
-    why: "Mengapa menggunakan platform ini",
-    chain: "Semua catatan disimpan dengan cara yang sulit dimanipulasi",
-    chainDesc: "Catatan pengajuan, pembayaran, dan persetujuan visa disimpan secara tepercaya dan dihapus otomatis setelah permintaan pengguna atau 1 tahun.",
-    cta: "Mulai sekarang, semua proses berjalan otomatis",
-    kakao: "Konsultasi KakaoTalk",
-    whatsapp: "Konsultasi WhatsApp",
-    footer: "© 2025 SMILE AI Indonesia Platform. Semua hak dilindungi.",
-    signup: "Daftar",
+    join: "Daftar",
     login: "Masuk",
-    dashboard: "Dashboard Member",
-    passport: "Upload Paspor",
-    backHome: "Kembali ke Home",
-    backDashboard: "Kembali ke Dashboard",
+    whatsapp: "Konsultasi WhatsApp",
+    kakao: "Konsultasi KakaoTalk",
+    liveTitle: "Status Otomatis AI",
+    liveSub: "Pengguna hanya perlu memantau",
+    today: "Diproses Hari Ini",
+    active: "Sedang Berjalan",
+    automation: "Koneksi Otomatis",
+    avg: "Rata-rata Waktu",
+    flowTitle: "Alur otomatis yang dihubungkan AI",
+    flowDesc: "Setelah paspor diupload, AI menentukan prosedur yang diperlukan dan menjalankannya berurutan.",
+    services: "Layanan Otomatis",
+    why: "Mengapa menggunakan platform ini",
+    trust: "Catatan tersimpan, manipulasi dicegah",
+    trustDesc:
+      "Catatan pengajuan, pembayaran, dan persetujuan disimpan secara tepercaya dan dihapus atas permintaan pengguna atau setelah 1 tahun.",
+    cta: "Anda tidak perlu melakukan apa pun.",
+    ctaDesc: "Upload paspor, AI akan memulai proses yang diperlukan secara otomatis.",
+    signupTitle: "Daftar",
+    loginTitle: "Masuk",
     name: "Nama",
     email: "Email",
     phone: "Nomor Telepon",
     password: "Kata Sandi",
-    signupBtn: "Daftar dan Mulai",
-    loginBtn: "Masuk",
-    uploadDesc: "Upload paspor, lalu AI menganalisis data dan menghubungkan proses yang dibutuhkan.",
-    uploadFile: "Upload File Paspor",
+    signupButton: "Daftar dan Masuk Dashboard",
+    loginButton: "Masuk Dashboard",
+    toLogin: "Sudah punya akun? Masuk",
+    toSignup: "Belum punya akun? Daftar",
+    dashboard: "Dashboard Member",
+    dashboardDesc: "Semua pengajuan, pembayaran, dan status dijalankan di sini.",
+    uploadPassport: "Mulai Upload Paspor",
+    passportTitle: "Upload Paspor",
+    passportDesc:
+      "Upload gambar paspor atau PDF, AI akan menganalisis data dan menghubungkan proses yang dibutuhkan.",
+    uploadFile: "Pilih File Paspor",
     fileType: "Gambar atau PDF",
     analyze: "Mulai Analisis AI",
+    back: "Kembali",
+    home: "Home",
   },
   EN: {
-    badge: "AI Operated Platform",
-    hero1: "AI handles your",
-    hero2: "Indonesia entry",
-    hero3: "and settlement",
-    desc: "With one passport, visa · customs · exchange · pickup · vehicle · accommodation are processed automatically.",
+    navStart: "Start",
+    navLogin: "Login",
+    heroLine1: "Upload only your passport.",
+    heroLine2: "AI handles entry to settlement",
+    heroLine3: "automatically.",
+    heroDesc:
+      "Visa · customs · exchange · airport pickup · vehicle · accommodation · long stay are connected automatically from application to status tracking.",
     start: "Start with Passport",
-    join: "Sign up / Login",
-    live: "Real-time Status",
-    operating: "Live Operating",
-    processingTitle: "The system is processing now",
-    processingDesc: "Applications, payments, approvals, and assignments are checked in real time from My Page.",
-    flow: "AI Automated Flow",
-    flowDesc: "Enter passport information and AI connects all required procedures automatically.",
-    services: "Quick Services",
-    why: "Why use this platform",
-    chain: "All records are stored in a tamper-resistant way",
-    chainDesc: "Application, payment, and visa approval records are stored reliably and deleted upon request or after one year.",
-    cta: "Start now and every procedure runs automatically",
-    kakao: "KakaoTalk Support",
-    whatsapp: "WhatsApp Support",
-    footer: "© 2025 SMILE AI Indonesia Platform. All rights reserved.",
-    signup: "Sign Up",
+    join: "Sign Up",
     login: "Login",
-    dashboard: "Member Dashboard",
-    passport: "Passport Upload",
-    backHome: "Back to Home",
-    backDashboard: "Back to Dashboard",
+    whatsapp: "WhatsApp Support",
+    kakao: "KakaoTalk Support",
+    liveTitle: "AI Automation Status",
+    liveSub: "Users only need to check progress",
+    today: "Processed Today",
+    active: "Currently Active",
+    automation: "Auto Connection",
+    avg: "Average Time",
+    flowTitle: "Full automation flow connected by AI",
+    flowDesc: "After passport upload, AI determines required procedures and runs them in order.",
+    services: "Automated Services",
+    why: "Why use this platform",
+    trust: "Records remain, manipulation is blocked",
+    trustDesc:
+      "Application, payment, and approval records are stored reliably and deleted upon request or after one year.",
+    cta: "You do not need to do anything.",
+    ctaDesc: "Upload your passport and AI starts the required procedures automatically.",
+    signupTitle: "Sign Up",
+    loginTitle: "Login",
     name: "Name",
     email: "Email",
     phone: "Phone Number",
     password: "Password",
-    signupBtn: "Sign Up and Start",
-    loginBtn: "Login",
-    uploadDesc: "Upload your passport and AI will analyze it and connect the required process.",
-    uploadFile: "Upload Passport File",
+    signupButton: "Sign Up and Open Dashboard",
+    loginButton: "Login and Open Dashboard",
+    toLogin: "Already have an account? Login",
+    toSignup: "No account? Sign up",
+    dashboard: "Member Dashboard",
+    dashboardDesc: "All applications, payments, and progress tracking run here.",
+    uploadPassport: "Start Passport Upload",
+    passportTitle: "Passport Upload",
+    passportDesc:
+      "Upload a passport image or PDF. AI analyzes the information and connects the required procedures.",
+    uploadFile: "Choose Passport File",
     fileType: "Image or PDF",
     analyze: "Start AI Analysis",
+    back: "Back",
+    home: "Home",
   },
   CN: {
-    badge: "AI 自动处理平台",
-    hero1: "AI 自动处理",
-    hero2: "印尼入境到定居",
-    hero3: "全部流程",
-    desc: "只需护照，签证 · 海关 · 换汇 · 接机 · 车辆 · 住宿全部自动进行。",
+    navStart: "开始",
+    navLogin: "登录",
+    heroLine1: "只需上传护照。",
+    heroLine2: "AI 自动处理入境到定居",
+    heroLine3: "全部流程。",
+    heroDesc:
+      "签证 · 海关申报 · 换汇 · 接机 · 车辆 · 住宿 · 长期居留，从申请到进度确认全部自动连接。",
     start: "用护照开始",
-    join: "注册 / 登录",
-    live: "实时进度",
-    operating: "实时处理中",
-    processingTitle: "系统正在处理中",
-    processingDesc: "申请、付款、批准、分配记录可在我的页面实时确认。",
-    flow: "AI 自动流程",
-    flowDesc: "输入护照信息后，AI 自动连接所需流程。",
-    services: "服务入口",
-    why: "为什么使用此平台",
-    chain: "所有记录以不可篡改方式保存",
-    chainDesc: "申请记录、付款记录、签证批准记录将以可信方式保存，并在用户请求或一年后自动删除。",
-    cta: "现在开始，所有流程将自动进行",
-    kakao: "KakaoTalk 咨询",
-    whatsapp: "WhatsApp 咨询",
-    footer: "© 2025 SMILE AI Indonesia Platform. All rights reserved.",
-    signup: "注册",
+    join: "注册",
     login: "登录",
-    dashboard: "会员仪表板",
-    passport: "护照上传",
-    backHome: "返回首页",
-    backDashboard: "返回仪表板",
+    whatsapp: "WhatsApp 咨询",
+    kakao: "KakaoTalk 咨询",
+    liveTitle: "AI 自动处理状态",
+    liveSub: "用户只需确认进度",
+    today: "今日自动处理",
+    active: "当前进行中",
+    automation: "自动连接率",
+    avg: "平均处理时间",
+    flowTitle: "AI 自动连接的完整流程",
+    flowDesc: "上传护照后，AI 判断所需流程并按顺序执行。",
+    services: "自动处理服务",
+    why: "为什么使用此平台",
+    trust: "记录保留，防止篡改",
+    trustDesc:
+      "申请记录、付款记录、批准记录将以可信方式保存，并在用户请求或一年后自动删除。",
+    cta: "您什么都不需要做。",
+    ctaDesc: "只需上传护照，AI 将自动开始所需流程。",
+    signupTitle: "注册",
+    loginTitle: "登录",
     name: "姓名",
     email: "邮箱",
     phone: "电话号码",
     password: "密码",
-    signupBtn: "注册并开始",
-    loginBtn: "登录",
-    uploadDesc: "上传护照后，AI 将分析信息并自动连接所需流程。",
-    uploadFile: "上传护照文件",
+    signupButton: "注册并进入仪表板",
+    loginButton: "登录并进入仪表板",
+    toLogin: "已有账号？登录",
+    toSignup: "没有账号？注册",
+    dashboard: "会员仪表板",
+    dashboardDesc: "所有申请、付款、进度确认都在这里执行。",
+    uploadPassport: "开始上传护照",
+    passportTitle: "护照上传",
+    passportDesc:
+      "上传护照图片或 PDF 后，AI 将分析信息并自动连接所需流程。",
+    uploadFile: "选择护照文件",
     fileType: "图片或 PDF",
     analyze: "开始 AI 分析",
+    back: "返回",
+    home: "首页",
   },
 };
 
-const SERVICES = {
-  KR: [
-    ["visa", "비자 / 입국 준비", "Visa & Entry"],
-    ["customs", "세관 신고", "e-Customs"],
-    ["exchange", "화폐 교환", "Currency Exchange"],
-    ["pickup", "공항 픽업", "Airport Pickup"],
-    ["car", "차량 렌탈", "Car Rental"],
-    ["hotel", "숙소 신청", "Accommodation"],
-    ["package", "장기체류 패키지", "Long Stay Package"],
-    ["status", "진행상황 조회", "Check Status"],
-  ],
-  ID: [
-    ["visa", "Visa / Masuk", "Visa & Entry"],
-    ["customs", "Bea Cukai", "e-Customs"],
-    ["exchange", "Penukaran Uang", "Currency Exchange"],
-    ["pickup", "Pickup Bandara", "Airport Pickup"],
-    ["car", "Rental Mobil", "Car Rental"],
-    ["hotel", "Akomodasi", "Accommodation"],
-    ["package", "Paket Tinggal Lama", "Long Stay Package"],
-    ["status", "Cek Status", "Check Status"],
-  ],
-  EN: [
-    ["visa", "Visa / Entry", "Visa & Entry"],
-    ["customs", "Customs Declaration", "e-Customs"],
-    ["exchange", "Currency Exchange", "Currency Exchange"],
-    ["pickup", "Airport Pickup", "Airport Pickup"],
-    ["car", "Car Rental", "Car Rental"],
-    ["hotel", "Accommodation", "Accommodation"],
-    ["package", "Long Stay Package", "Long Stay Package"],
-    ["status", "Check Status", "Check Status"],
-  ],
-  CN: [
-    ["visa", "签证 / 入境", "Visa & Entry"],
-    ["customs", "海关申报", "e-Customs"],
-    ["exchange", "货币兑换", "Currency Exchange"],
-    ["pickup", "机场接送", "Airport Pickup"],
-    ["car", "车辆租赁", "Car Rental"],
-    ["hotel", "住宿申请", "Accommodation"],
-    ["package", "长期居留套餐", "Long Stay Package"],
-    ["status", "进度查询", "Check Status"],
-  ],
+const SERVICE_KEYS = [
+  "Visa",
+  "Customs",
+  "Exchange",
+  "Pickup",
+  "Vehicle",
+  "Stay",
+  "Long Stay",
+  "Status",
+];
+
+const SERVICE_TEXT = {
+  KR: ["비자", "세관신고", "환전", "공항픽업", "차량", "숙소", "장기체류", "진행조회"],
+  ID: ["Visa", "Bea Cukai", "Penukaran", "Pickup", "Mobil", "Akomodasi", "Tinggal Lama", "Status"],
+  EN: SERVICE_KEYS,
+  CN: ["签证", "海关", "换汇", "接机", "车辆", "住宿", "长期居留", "进度"],
 };
 
 const WHY = {
   KR: [
-    ["AI 자동 처리", "여권 정보만 입력하면 모든 절차를 자동으로 연결합니다"],
-    ["실시간 진행 확인", "모든 진행상황은 마이페이지에서 실시간 확인 가능합니다"],
-    ["온체인 기록 저장", "모든 신청, 결제, 승인 기록은 위변조 불가능한 방식으로 저장됩니다"],
-    ["자동 알림 시스템", "비자 만료, 승인 완료, 수령 안내를 자동으로 제공합니다"],
-    ["개인정보 보호", "모든 데이터는 1년 후 자동 삭제됩니다"],
+    ["AI 자동 처리", "여권 정보만 입력하면 필요한 절차가 자동 연결됩니다."],
+    ["마이페이지 실행", "신청, 결제, 진행 확인은 회원 대시보드에서 처리됩니다."],
+    ["실시간 알림", "승인, 만료, 수령, 배정 상태를 자동 안내합니다."],
+    ["기록 보호", "신청·결제·승인 기록을 신뢰 가능한 방식으로 보관합니다."],
   ],
   ID: [
-    ["Proses Otomatis AI", "Cukup masukkan data paspor, semua proses akan terhubung otomatis"],
-    ["Cek Real-time", "Semua status dapat dicek real-time di halaman saya"],
-    ["Catatan On-chain", "Pengajuan, pembayaran, dan persetujuan disimpan dengan cara yang sulit dimanipulasi"],
-    ["Notifikasi Otomatis", "Masa berlaku visa, persetujuan, dan pengambilan akan diberitahukan otomatis"],
-    ["Perlindungan Data", "Semua data akan dihapus otomatis setelah 1 tahun"],
+    ["Proses AI", "Data paspor menghubungkan prosedur yang dibutuhkan secara otomatis."],
+    ["Dashboard Member", "Pengajuan, pembayaran, dan status diproses di dashboard."],
+    ["Notifikasi Real-time", "Persetujuan, kedaluwarsa, dan penugasan diberitahukan otomatis."],
+    ["Proteksi Catatan", "Catatan pengajuan, pembayaran, dan persetujuan disimpan tepercaya."],
   ],
   EN: [
-    ["AI Automation", "Enter passport information and every procedure is connected automatically"],
-    ["Real-time Tracking", "All progress can be checked from My Page in real time"],
-    ["On-chain Records", "Applications, payments, and approvals are stored in a tamper-resistant way"],
-    ["Automatic Alerts", "Visa expiry, approval, and pickup notices are provided automatically"],
-    ["Privacy Protection", "All data is automatically deleted after one year"],
+    ["AI Automation", "Passport information connects required procedures automatically."],
+    ["Member Dashboard", "Applications, payments, and tracking run from the dashboard."],
+    ["Real-time Alerts", "Approvals, expiry, pickup, and assignments are notified automatically."],
+    ["Record Protection", "Application, payment, and approval records are stored reliably."],
   ],
   CN: [
-    ["AI 自动处理", "输入护照信息后，所有流程自动连接"],
-    ["实时进度确认", "所有进度可在我的页面实时确认"],
-    ["链上记录保存", "申请、付款、批准记录以不可篡改方式保存"],
-    ["自动通知系统", "签证到期、批准完成、领取通知将自动提供"],
-    ["个人信息保护", "所有数据将在一年后自动删除"],
+    ["AI 自动处理", "护照信息自动连接所需流程。"],
+    ["会员仪表板", "申请、付款、进度确认都在仪表板执行。"],
+    ["实时通知", "批准、到期、领取、分配状态自动通知。"],
+    ["记录保护", "申请、付款、批准记录以可信方式保存。"],
   ],
 };
 
-const FLOW = {
-  KR: ["여권 입력", "AI 분석", "자동 신청", "실시간 처리", "완료"],
-  ID: ["Input Paspor", "Analisis AI", "Pengajuan Otomatis", "Proses Real-time", "Selesai"],
-  EN: ["Passport Input", "AI Analysis", "Auto Application", "Real-time Process", "Done"],
-  CN: ["护照输入", "AI 分析", "自动申请", "实时处理", "完成"],
-};
-
-const LIVE = {
-  KR: [
-    ["KIM M***", "비자 승인 완료"],
-    ["LEE J***", "차량 배정 완료"],
-    ["PARK S***", "환전 수령 준비 완료"],
-    ["CHEN L***", "숙소 예약 완료"],
-  ],
-  ID: [
-    ["KIM M***", "Visa disetujui"],
-    ["LEE J***", "Mobil telah ditugaskan"],
-    ["PARK S***", "Penukaran siap diambil"],
-    ["CHEN L***", "Akomodasi dipesan"],
-  ],
-  EN: [
-    ["KIM M***", "Visa approved"],
-    ["LEE J***", "Vehicle assigned"],
-    ["PARK S***", "Exchange ready"],
-    ["CHEN L***", "Accommodation booked"],
-  ],
-  CN: [
-    ["KIM M***", "签证已批准"],
-    ["LEE J***", "车辆已分配"],
-    ["PARK S***", "换汇准备完成"],
-    ["CHEN L***", "住宿已预订"],
-  ],
-};
-
-function Icon({ type }) {
-  const icons = {
-    visa: "M12 2v20M5 5h14v14H5z",
-    customs: "M6 3h9l5 5v13H6z M15 3v6h6",
-    exchange: "M7 7h11M7 7l3-3M7 7l3 3M17 17H6m11 0l-3-3m3 3l-3 3",
-    pickup: "M3 16l18-9-8 18-2-8z",
-    car: "M5 14l2-5h10l2 5M6 14h12v5H6zM8 19v2M16 19v2",
-    hotel: "M4 20V8h7v12M11 12h9v8M7 11h1M7 15h1M15 15h1",
-    package: "M4 7l8-4 8 4v10l-8 4-8-4zM4 7l8 4 8-4M12 11v10",
-    status: "M4 19V9M10 19V5M16 19v-8M22 19H2",
-    ai: "M12 2v4M12 18v4M4 12H2M22 12h-2M6 6l-2-2M18 18l2 2M18 6l2-2M6 18l-2 2M8 8h8v8H8z",
-    lock: "M6 10h12v10H6zM8 10V7a4 4 0 018 0v3",
-    bell: "M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4",
-    headset: "M4 13a8 8 0 0116 0v5h-4v-6h4M4 18h4v-6H4z",
+function Icon({ name }) {
+  const map = {
+    Visa: "M7 3h10v18H7z M9 7h6 M9 11h6 M9 15h4",
+    Customs: "M5 4h14v5c0 6-3 10-7 11-4-1-7-5-7-11z M9 10h6",
+    Exchange: "M7 7h10M7 7l3-3M7 7l3 3M17 17H7m10 0l-3-3m3 3l-3 3",
+    Pickup: "M3 16l18-9-8 14-2-6z",
+    Vehicle: "M5 14l2-5h10l2 5v5H5z M8 19v2M16 19v2",
+    Stay: "M4 20V8h7v12M11 12h9v8M7 12h1M7 16h1M15 16h1",
+    "Long Stay": "M4 7l8-4 8 4v10l-8 4-8-4z M4 7l8 4 8-4 M12 11v10",
+    Status: "M4 19V9M10 19V5M16 19v-7M22 19H2",
+    AI: "M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M18 18l-2-2M18 6l-2 2M6 18l2-2M8 8h8v8H8z",
+    Lock: "M6 10h12v10H6z M8 10V7a4 4 0 018 0v3",
+    Upload: "M12 16V4M7 9l5-5 5 5M5 20h14",
   };
-
   return (
-    <svg className="svgIcon" viewBox="0 0 24 24" fill="none">
-      <path d={icons[type]} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" className="icon">
+      <path d={map[name]} />
     </svg>
   );
 }
@@ -296,227 +275,337 @@ function Icon({ type }) {
 export default function App() {
   const [lang, setLang] = useState("KR");
   const [page, setPage] = useState("home");
-  const [step, setStep] = useState(0);
-  const [live, setLive] = useState(LIVE.KR);
+  const [pulse, setPulse] = useState(0);
+  const [stats, setStats] = useState({
+    today: 128,
+    active: 23,
+    automation: 91,
+    avg: "4:18",
+  });
 
-  const t = TEXT[lang];
-
-  useEffect(() => {
-    setLive(LIVE[lang]);
-  }, [lang]);
+  const t = COPY[lang];
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setStep((v) => (v + 1) % 5);
-      setLive((prev) => [prev[Math.floor(Math.random() * prev.length)], ...prev].slice(0, 4));
-    }, 1500);
+      setPulse((v) => (v + 1) % 8);
+      setStats((s) => ({
+        today: s.today + Math.floor(Math.random() * 3),
+        active: 18 + Math.floor(Math.random() * 12),
+        automation: 89 + Math.floor(Math.random() * 8),
+        avg: `4:${10 + Math.floor(Math.random() * 40)}`,
+      }));
+    }, 1400);
     return () => clearInterval(timer);
   }, []);
 
-  if (page === "signup") return <Auth type="signup" t={t} lang={lang} setLang={setLang} setPage={setPage} />;
-  if (page === "login") return <Auth type="login" t={t} lang={lang} setLang={setLang} setPage={setPage} />;
-  if (page === "dashboard") return <Dashboard t={t} lang={lang} setLang={setLang} setPage={setPage} />;
-  if (page === "passport") return <Passport t={t} lang={lang} setLang={setLang} setPage={setPage} />;
+  const common = { lang, setLang, setPage, t };
+
+  if (page === "signup") return <Auth type="signup" {...common} />;
+  if (page === "login") return <Auth type="login" {...common} />;
+  if (page === "dashboard") return <Dashboard {...common} pulse={pulse} />;
+  if (page === "passport") return <Passport {...common} />;
 
   return (
-    <div className="app">
-      <div className="bgGlow" />
-      <Header lang={lang} setLang={setLang} setPage={setPage} />
+    <main className="app">
+      <Background />
+      <Header {...common} />
 
       <section className="hero">
-        <div className="heroText">
-          <div className="badge">{t.badge}</div>
-          <h2>
-            {t.hero1}<br />
-            {t.hero2}<br />
-            <span>{t.hero3}</span>
-          </h2>
-          <p className="heroDesc">{t.desc}</p>
-
-          <div className="heroButtons">
-            <button className="primary" onClick={() => setPage("signup")}>{t.start} →</button>
-            <button className="secondary" onClick={() => setPage("signup")}>{t.join} →</button>
+        <div className="heroCopy">
+          <div className="badge">
+            <span className="dot" /> AI OPERATING SYSTEM
           </div>
 
-          <div className="features">
-            <span><Icon type="ai" /> AI</span>
-            <span><Icon type="lock" /> Secure</span>
-            <span><Icon type="bell" /> Alert</span>
-            <span><Icon type="headset" /> Support</span>
+          <h1>
+            {t.heroLine1}
+            <br />
+            {t.heroLine2}
+            <br />
+            <span>{t.heroLine3}</span>
+          </h1>
+
+          <p>{t.heroDesc}</p>
+
+          <div className="actions">
+            <button className="primary" onClick={() => setPage("signup")}>
+              <Icon name="Upload" /> {t.start}
+            </button>
+            <button className="glassBtn" onClick={() => setPage("login")}>
+              {t.login}
+            </button>
+          </div>
+
+          <div className="supportRow">
+            <button onClick={() => window.open("https://wa.me/821027378821", "_blank")}>
+              {t.whatsapp}
+            </button>
+            <button onClick={() => window.open("https://pf.kakao.com", "_blank")}>
+              {t.kakao}
+            </button>
           </div>
         </div>
 
-        <div className="aiVisual">
-          <div className="core">AI</div>
-          {SERVICES.KR.slice(0, 6).map(([type], i) => (
-            <div key={type} className={`node node${i} ${step === i % 5 ? "active" : ""}`}>
-              <Icon type={type} />
-            </div>
-          ))}
-          <div className="scanLine" />
-        </div>
+        <AutomationVisual lang={lang} pulse={pulse} />
       </section>
 
-      <section className="liveSection">
-        <div className="liveBox">
-          <div className="sectionHead">
-            <h3>{t.live}</h3>
-            <span>● {t.operating}</span>
-          </div>
-          {live.map(([name, status], i) => (
-            <div className="liveItem" key={name + status + i}>
-              <strong>{name}</strong>
-              <em>{status}</em>
-              <small>{i === 0 ? "now" : `${i * 3}s`}</small>
-            </div>
-          ))}
+      <section className="statsPanel">
+        <div className="panelTitle">
+          <h2>{t.liveTitle}</h2>
+          <p>{t.liveSub}</p>
         </div>
 
-        <div className="trustMini">
-          <h3>{t.processingTitle}</h3>
-          <p>{t.processingDesc}</p>
-          <button className="whatsapp" onClick={() => window.open("https://wa.me/821027378821")}>{t.whatsapp}</button>
-          <button className="kakao" onClick={() => window.open("https://pf.kakao.com")}>{t.kakao}</button>
-        </div>
+        <Stat label={t.today} value={`${stats.today}`} />
+        <Stat label={t.active} value={`${stats.active}`} />
+        <Stat label={t.automation} value={`${stats.automation}%`} />
+        <Stat label={t.avg} value={stats.avg} />
       </section>
 
-      <section className="flow">
-        <h3>{t.flow}</h3>
-        <p>{t.flowDesc}</p>
-        <div className="flowGrid">
-          {FLOW[lang].map((v, i) => (
-            <div className={`flowCard ${step >= i ? "active" : ""}`} key={v}>
-              <Icon type={["visa", "ai", "customs", "status", "lock"][i]} />
-              <strong>{v}</strong>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="services">
-        <h3>{t.services}</h3>
-        <div className="serviceGrid">
-          {SERVICES[lang].map(([type, title, en]) => (
-            <div className="serviceCard" key={title} onClick={() => setPage("signup")}>
-              <Icon type={type} />
-              <strong>{title}</strong>
-              <p>{en}</p>
-              <span>→</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="why">
-        <h3>{t.why}</h3>
-        <div className="whyGrid">
-          {WHY[lang].map(([title, text], i) => (
-            <div className="whyCard" key={title}>
-              <b>{i + 1}. {title}</b>
-              <p>{text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="chain">
+      <section className="flowSection">
         <div>
-          <h3>{t.chain}</h3>
-          <p>{t.chainDesc}</p>
+          <h2>{t.flowTitle}</h2>
+          <p>{t.flowDesc}</p>
         </div>
-        <div className="chainCards">
-          <div><Icon type="customs" /> Record</div>
-          <div><Icon type="exchange" /> Payment</div>
-          <div><Icon type="lock" /> Approval</div>
+        <div className="processLine">
+          {SERVICE_KEYS.slice(0, 6).map((key, i) => (
+            <div className={`processStep ${pulse >= i ? "on" : ""}`} key={key}>
+              <Icon name={key} />
+              <span>{SERVICE_TEXT[lang][i]}</span>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="cta">
-        <h3>{t.cta}</h3>
-        <button onClick={() => setPage("signup")}>{t.start} →</button>
+      <section className="serviceSection">
+        <h2>{t.services}</h2>
+        <div className="serviceGrid">
+          {SERVICE_KEYS.map((key, i) => (
+            <button className="serviceCard" key={key} onClick={() => setPage("signup")}>
+              <Icon name={key} />
+              <strong>{SERVICE_TEXT[lang][i]}</strong>
+              <span>{key}</span>
+            </button>
+          ))}
+        </div>
       </section>
 
-      <footer>{t.footer}</footer>
-    </div>
+      <section className="whyTrust">
+        <div className="whyBox">
+          <h2>{t.why}</h2>
+          <div className="whyList">
+            {WHY[lang].map(([a, b], i) => (
+              <div key={a}>
+                <b>0{i + 1}</b>
+                <strong>{a}</strong>
+                <p>{b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="trustBox">
+          <Icon name="Lock" />
+          <h2>{t.trust}</h2>
+          <p>{t.trustDesc}</p>
+          <div className="trustTags">
+            <span>Application Record</span>
+            <span>Payment Record</span>
+            <span>Approval Record</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="finalCta">
+        <h2>{t.cta}</h2>
+        <p>{t.ctaDesc}</p>
+        <button className="primary" onClick={() => setPage("signup")}>
+          <Icon name="Upload" /> {t.start}
+        </button>
+      </section>
+
+      <footer>© 2025 SMILE AI Indonesia Platform</footer>
+    </main>
   );
 }
 
-function Header({ lang, setLang, setPage }) {
+function Header({ lang, setLang, setPage, t }) {
   return (
     <header className="header">
-      <div className="brand" onClick={() => setPage("home")}>
-        <div className="logo">AI</div>
+      <button className="brand" onClick={() => setPage("home")}>
+        <span>AI</span>
         <div>
-          <h1>SMILE AI</h1>
-          <p>INDONESIA PLATFORM</p>
+          <strong>SMILE AI</strong>
+          <small>INDONESIA PLATFORM</small>
         </div>
-      </div>
+      </button>
+
+      <nav>
+        <button onClick={() => setPage("signup")}>{t.navStart}</button>
+        <button onClick={() => setPage("login")}>{t.navLogin}</button>
+      </nav>
+
       <div className="langs">
         {LANGS.map((l) => (
-          <button key={l} className={lang === l ? "active" : ""} onClick={() => setLang(l)}>{l}</button>
+          <button key={l} className={lang === l ? "active" : ""} onClick={() => setLang(l)}>
+            {l}
+          </button>
         ))}
       </div>
     </header>
   );
 }
 
-function Auth({ type, t, lang, setLang, setPage }) {
-  const login = type === "login";
+function Background() {
   return (
-    <div className="app">
-      <Header lang={lang} setLang={setLang} setPage={setPage} />
-      <section className="authBox">
-        <button className="backBtn" onClick={() => setPage("home")}>← {t.backHome}</button>
-        <div className="authIcon"><Icon type={login ? "lock" : "visa"} /></div>
-        <h2>{login ? t.login : t.signup}</h2>
-        {!login && <input placeholder={t.name} />}
-        <input placeholder={t.email} />
-        {!login && <input placeholder={t.phone} />}
-        <input placeholder={t.password} type="password" />
-        <button className="authMain" onClick={() => setPage("dashboard")}>{login ? t.loginBtn : t.signupBtn}</button>
-      </section>
+    <>
+      <div className="gridBg" />
+      <div className="glow glowA" />
+      <div className="glow glowB" />
+    </>
+  );
+}
+
+function AutomationVisual({ lang, pulse }) {
+  const labels = SERVICE_TEXT[lang];
+  const nodes = SERVICE_KEYS.slice(0, 6);
+
+  return (
+    <div className="visualCard">
+      <div className="orbitRing ring1" />
+      <div className="orbitRing ring2" />
+      <div className="dataBeam beam1" />
+      <div className="dataBeam beam2" />
+      <div className="aiCore">
+        <Icon name="AI" />
+        <strong>AI CORE</strong>
+        <small>AUTO ROUTING</small>
+      </div>
+
+      {nodes.map((key, i) => (
+        <div className={`visualNode node${i} ${pulse === i ? "active" : ""}`} key={key}>
+          <Icon name={key} />
+          <span>{labels[i]}</span>
+        </div>
+      ))}
+
+      <div className="passportChip">
+        <Icon name="Upload" />
+        <span>PASSPORT INPUT</span>
+      </div>
     </div>
   );
 }
 
-function Dashboard({ t, lang, setLang, setPage }) {
+function Stat({ label, value }) {
   return (
-    <div className="app">
-      <Header lang={lang} setLang={setLang} setPage={setPage} />
-      <section className="dashboard">
-        <h2>{t.dashboard}</h2>
-        <button className="primary wide" onClick={() => setPage("passport")}>{t.start} →</button>
-        <div className="serviceGrid">
-          {SERVICES[lang].map(([type, title]) => (
-            <div className="serviceCard" key={title}>
-              <Icon type={type} />
-              <strong>{title}</strong>
-              <p>{type === "visa" ? t.passport : t.operating}</p>
-            </div>
-          ))}
+    <div className="statCard">
+      <strong>{value}</strong>
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function Auth({ type, t, setPage, ...rest }) {
+  const isLogin = type === "login";
+
+  return (
+    <main className="app">
+      <Background />
+      <Header t={t} setPage={setPage} {...rest} />
+
+      <section className="authShell">
+        <div className="authPanel">
+          <button className="backBtn" onClick={() => setPage("home")}>
+            ← {t.home}
+          </button>
+
+          <div className="authIcon">
+            <Icon name={isLogin ? "Lock" : "AI"} />
+          </div>
+
+          <h1>{isLogin ? t.loginTitle : t.signupTitle}</h1>
+
+          {!isLogin && <input placeholder={t.name} />}
+          <input placeholder={t.email} />
+          {!isLogin && <input placeholder={t.phone} />}
+          <input placeholder={t.password} type="password" />
+
+          <button className="primary full" onClick={() => setPage("dashboard")}>
+            {isLogin ? t.loginButton : t.signupButton}
+          </button>
+
+          <button className="linkBtn" onClick={() => setPage(isLogin ? "signup" : "login")}>
+            {isLogin ? t.toSignup : t.toLogin}
+          </button>
         </div>
       </section>
-    </div>
+    </main>
   );
 }
 
-function Passport({ t, lang, setLang, setPage }) {
-  const [file, setFile] = useState("");
+function Dashboard({ t, lang, pulse, setPage, ...rest }) {
   return (
-    <div className="app">
-      <Header lang={lang} setLang={setLang} setPage={setPage} />
-      <section className="authBox">
-        <button className="backBtn" onClick={() => setPage("dashboard")}>← {t.backDashboard}</button>
-        <div className="authIcon"><Icon type="visa" /></div>
-        <h2>{t.passport}</h2>
-        <p>{t.uploadDesc}</p>
-        <label className="uploadBox">
-          <input type="file" accept="image/*,.pdf" onChange={(e) => setFile(e.target.files?.[0]?.name || "")} />
-          <strong>{file || t.uploadFile}</strong>
-          <span>{t.fileType}</span>
-        </label>
-        <button className="authMain">{t.analyze}</button>
+    <main className="app">
+      <Background />
+      <Header t={t} lang={lang} setPage={setPage} {...rest} />
+
+      <section className="dashboardHero">
+        <div>
+          <h1>{t.dashboard}</h1>
+          <p>{t.dashboardDesc}</p>
+        </div>
+        <button className="primary" onClick={() => setPage("passport")}>
+          <Icon name="Upload" /> {t.uploadPassport}
+        </button>
       </section>
-    </div>
+
+      <section className="dashboardGrid">
+        {SERVICE_KEYS.map((key, i) => (
+          <div className={`dashCard ${pulse === i ? "active" : ""}`} key={key}>
+            <Icon name={key} />
+            <strong>{SERVICE_TEXT[lang][i]}</strong>
+            <span>{i === 0 ? t.uploadPassport : t.active}</span>
+          </div>
+        ))}
+      </section>
+    </main>
+  );
+}
+
+function Passport({ t, setPage, ...rest }) {
+  const [file, setFile] = useState("");
+
+  return (
+    <main className="app">
+      <Background />
+      <Header t={t} setPage={setPage} {...rest} />
+
+      <section className="authShell">
+        <div className="authPanel passportPanel">
+          <button className="backBtn" onClick={() => setPage("dashboard")}>
+            ← {t.back}
+          </button>
+
+          <div className="authIcon">
+            <Icon name="Upload" />
+          </div>
+
+          <h1>{t.passportTitle}</h1>
+          <p>{t.passportDesc}</p>
+
+          <label className="uploadBox">
+            <input
+              type="file"
+              accept="image/*,.pdf"
+              onChange={(e) => setFile(e.target.files?.[0]?.name || "")}
+            />
+            <Icon name="Upload" />
+            <strong>{file || t.uploadFile}</strong>
+            <span>{t.fileType}</span>
+          </label>
+
+          <button className="primary full">{t.analyze}</button>
+        </div>
+      </section>
+    </main>
   );
 }
