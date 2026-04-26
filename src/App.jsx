@@ -30,6 +30,15 @@ export default function App() {
       rental: "Car Rental",
       stay: "Accommodation",
       contact: "Contact"
+    },
+    CN: {
+      title: "印尼一站式服务",
+      visa: "签证申请",
+      customs: "海关申报",
+      exchange: "货币兑换",
+      rental: "车辆租赁",
+      stay: "住宿预订",
+      contact: "联系客服"
     }
   };
 
@@ -48,12 +57,9 @@ export default function App() {
       {/* 언어 선택 */}
       <div style={{ marginBottom: "20px" }}>
         <button onClick={() => setLang("KR")}>KR</button>
-        <button onClick={() => setLang("ID")} style={{ marginLeft: "10px" }}>
-          ID
-        </button>
-        <button onClick={() => setLang("EN")} style={{ marginLeft: "10px" }}>
-          EN
-        </button>
+        <button onClick={() => setLang("ID")} style={{ marginLeft: "10px" }}>ID</button>
+        <button onClick={() => setLang("EN")} style={{ marginLeft: "10px" }}>EN</button>
+        <button onClick={() => setLang("CN")} style={{ marginLeft: "10px" }}>CN</button>
       </div>
 
       {/* 제목 */}
@@ -68,7 +74,7 @@ export default function App() {
         <button>{t.stay}</button>
       </div>
 
-      {/* 상담 연결 (WhatsApp 연결 완료) */}
+      {/* 상담 연결 */}
       <div style={{ marginTop: "30px" }}>
         <button
           onClick={() =>
