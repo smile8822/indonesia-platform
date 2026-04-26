@@ -615,3 +615,89 @@ footer {
   .icon3 { bottom: 25px; left: 30px; }
   .icon4 { top: 90px; left: -10px; }
 }
+.svgIcon {
+  width: 38px;
+  height: 38px;
+  color: #6ff7ff;
+}
+
+.aiVisual {
+  position: relative;
+  min-height: 460px;
+  display: grid;
+  place-items: center;
+}
+
+.core {
+  width: 150px;
+  height: 150px;
+  border-radius: 36px;
+  display: grid;
+  place-items: center;
+  font-size: 54px;
+  font-weight: 900;
+  background: radial-gradient(circle, rgba(0,255,255,.35), rgba(0,20,40,.85));
+  border: 1px solid rgba(111,247,255,.45);
+  box-shadow: 0 0 80px rgba(0,255,255,.45);
+}
+
+.node {
+  position: absolute;
+  width: 82px;
+  height: 82px;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.25);
+  transition: .35s;
+}
+
+.node.active {
+  transform: scale(1.18);
+  border-color: #6ff7ff;
+  box-shadow: 0 0 45px rgba(111,247,255,.65);
+  background: rgba(0,255,255,.13);
+}
+
+.node0 { top: 40px; left: 50%; transform: translateX(-50%); }
+.node1 { top: 140px; right: 55px; }
+.node2 { bottom: 80px; right: 95px; }
+.node3 { bottom: 80px; left: 95px; }
+.node4 { top: 140px; left: 55px; }
+.node5 { top: 50%; right: 0; }
+
+.scanLine {
+  position: absolute;
+  width: 70%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #6ff7ff, transparent);
+  animation: scan 2.4s linear infinite;
+}
+
+.whatsapp,
+.kakao {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 16px;
+  margin-top: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.whatsapp {
+  background: #13c767;
+  color: white;
+}
+
+.kakao {
+  background: #ffe600;
+  color: #111;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-140px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(140px); opacity: 0; }
+}
