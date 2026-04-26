@@ -1,223 +1,142 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import "./index.css";
 
 const WHATSAPP = "https://wa.me/821027378821";
-const KAKAO = "http://pf.kakao.com/_cBDxgn/chat";
+const KAKAO = "https://pf.kakao.com/_SmileAI/chat";
 
-const DATA = {
-  KR: {
-    badge: "AI OPERATED PLATFORM",
-    title1: "SMILE AI",
-    title2: "Indonesia Platform",
-    subtitle: "비자, 세관신고, 환전, 픽업, 차량, 숙소까지 한 번에 처리하는 AI 자동 신청 시스템",
-    start: "여권으로 시작하기",
-    loginJoin: "회원가입 / 로그인",
-    servicesTitle: "서비스 바로가기",
-    payment: "IDR 결제 수수료 없음 / KRW·USDT는 현지 통화 교환 지원 +1%",
-    paymentSub: "안전하고 투명한 결제 시스템을 제공합니다.",
-    kakao: "KakaoTalk 상담",
-    whatsapp: "WhatsApp 상담",
-    signup: "회원가입",
-    login: "로그인",
-    name: "이름",
-    email: "이메일",
-    phone: "전화번호",
-    password: "비밀번호",
-    agree: "개인정보 수집 및 1년 보관 후 자동삭제에 동의합니다.",
-    submit: "가입하고 시작하기",
-    back: "돌아가기",
-    mypage: "마이페이지",
-    status: "진행상황",
-    pay: "결제하기",
-    services: [
-      ["visa", "🛂", "비자 / 입국 준비", "Visa & Entry"],
-      ["customs", "🧾", "세관 신고", "e-Customs"],
-      ["exchange", "💱", "화폐 교환", "Currency Exchange"],
-      ["pickup", "✈️", "공항 픽업", "Airport Pickup"],
-      ["rental", "🚗", "차량 렌탈", "Car Rental"],
-      ["stay", "🏨", "숙소 신청", "Accommodation"],
-      ["longstay", "🌏", "장기체류 패키지", "Long Stay"],
-      ["status", "📊", "진행상황 조회", "Check Status"]
-    ]
-  },
-  ID: {
-    badge: "PLATFORM DIKELOLA AI",
-    title1: "SMILE AI",
-    title2: "Indonesia Platform",
-    subtitle: "Visa, e-Customs, penukaran uang, pickup, rental mobil, dan akomodasi dalam satu sistem AI",
-    start: "Mulai dengan Paspor",
-    loginJoin: "Daftar / Login",
-    servicesTitle: "Layanan",
-    payment: "Pembayaran IDR tanpa biaya / KRW·USDT dukungan konversi +1%",
-    paymentSub: "Sistem pembayaran aman dan transparan.",
-    kakao: "KakaoTalk",
-    whatsapp: "WhatsApp",
-    signup: "Daftar",
-    login: "Login",
-    name: "Nama",
-    email: "Email",
-    phone: "Nomor Telepon",
-    password: "Password",
-    agree: "Saya setuju data disimpan hingga 1 tahun lalu dihapus otomatis.",
-    submit: "Daftar dan Mulai",
-    back: "Kembali",
-    mypage: "Halaman Saya",
-    status: "Status",
-    pay: "Bayar",
-    services: [
-      ["visa", "🛂", "Visa / Masuk", "Visa & Entry"],
-      ["customs", "🧾", "Bea Cukai", "e-Customs"],
-      ["exchange", "💱", "Penukaran Uang", "Currency Exchange"],
-      ["pickup", "✈️", "Pickup Bandara", "Airport Pickup"],
-      ["rental", "🚗", "Rental Mobil", "Car Rental"],
-      ["stay", "🏨", "Akomodasi", "Accommodation"],
-      ["longstay", "🌏", "Paket Long Stay", "Long Stay"],
-      ["status", "📊", "Cek Status", "Check Status"]
-    ]
-  },
-  EN: {
-    badge: "AI OPERATED PLATFORM",
-    title1: "SMILE AI",
-    title2: "Indonesia Platform",
-    subtitle: "AI-powered system for visa, customs, exchange, pickup, car rental, and accommodation",
-    start: "Start with Passport",
-    loginJoin: "Sign Up / Login",
-    servicesTitle: "Services",
-    payment: "No fee for IDR / KRW·USDT includes local currency support +1%",
-    paymentSub: "Secure and transparent payment system.",
-    kakao: "KakaoTalk",
-    whatsapp: "WhatsApp",
-    signup: "Sign Up",
-    login: "Login",
-    name: "Name",
-    email: "Email",
-    phone: "Phone",
-    password: "Password",
-    agree: "I agree to data storage for up to 1 year and automatic deletion.",
-    submit: "Sign Up and Start",
-    back: "Back",
-    mypage: "My Page",
-    status: "Status",
-    pay: "Pay",
-    services: [
-      ["visa", "🛂", "Visa / Entry", "Visa & Entry"],
-      ["customs", "🧾", "Customs Declaration", "e-Customs"],
-      ["exchange", "💱", "Currency Exchange", "Currency Exchange"],
-      ["pickup", "✈️", "Airport Pickup", "Airport Pickup"],
-      ["rental", "🚗", "Car Rental", "Car Rental"],
-      ["stay", "🏨", "Accommodation", "Accommodation"],
-      ["longstay", "🌏", "Long Stay Package", "Long Stay"],
-      ["status", "📊", "Check Status", "Check Status"]
-    ]
-  },
-  CN: {
-    badge: "AI 运营平台",
-    title1: "SMILE AI",
-    title2: "印尼平台",
-    subtitle: "签证、海关申报、换汇、接送、租车、住宿，一站式 AI 自动申请系统",
-    start: "用护照开始",
-    loginJoin: "注册 / 登录",
-    servicesTitle: "服务入口",
-    payment: "IDR 无手续费 / KRW·USDT 本地货币兑换支持 +1%",
-    paymentSub: "安全透明的支付系统。",
-    kakao: "KakaoTalk 咨询",
-    whatsapp: "WhatsApp 咨询",
-    signup: "注册",
-    login: "登录",
-    name: "姓名",
-    email: "电子邮件",
-    phone: "电话号码",
-    password: "密码",
-    agree: "我同意资料最多保存1年后自动删除。",
-    submit: "注册并开始",
-    back: "返回",
-    mypage: "我的页面",
-    status: "进度",
-    pay: "付款",
-    services: [
-      ["visa", "🛂", "签证 / 入境准备", "Visa & Entry"],
-      ["customs", "🧾", "海关申报", "e-Customs"],
-      ["exchange", "💱", "货币兑换", "Currency Exchange"],
-      ["pickup", "✈️", "机场接送", "Airport Pickup"],
-      ["rental", "🚗", "车辆租赁", "Car Rental"],
-      ["stay", "🏨", "住宿申请", "Accommodation"],
-      ["longstay", "🌏", "长期居留套餐", "Long Stay"],
-      ["status", "📊", "查询进度", "Check Status"]
-    ]
-  }
-};
+const liveData = [
+  ["KIM M***", "비자 승인 완료", "success"],
+  ["LEE J***", "차량 배정 완료", "blue"],
+  ["PARK S***", "환전 수령 준비 완료", "purple"],
+  ["CHEN L***", "숙소 예약 완료", "success"],
+  ["AHMAD R***", "공항 픽업 기사 배정", "blue"],
+  ["SATO Y***", "세관 신고 QR 생성 완료", "purple"],
+];
+
+const services = [
+  ["🛂", "비자 / 입국 준비", "Visa & Entry", "AI 자동 신청 / 진행상태 확인"],
+  ["📄", "세관 신고", "e-Customs", "입국 전 자동 신고 및 QR 생성"],
+  ["💱", "화폐 교환", "Currency Exchange", "KRW · USD · USDT 현지 환전"],
+  ["✈️", "공항 픽업", "Airport Pickup", "도착 시간에 맞춘 기사 자동 배정"],
+  ["🚘", "차량 렌탈", "Car Rental", "기사 포함 / 미포함 선택 가능"],
+  ["🏨", "숙소 신청", "Accommodation", "단기 · 장기 숙소 자동 연결"],
+  ["📦", "장기체류 패키지", "Long Stay Package", "비자 · 차량 · 숙소 통합 관리"],
+  ["📊", "진행상황 조회", "Check Status", "마이페이지에서 실시간 확인"],
+];
 
 export default function App() {
-  const [lang, setLang] = useState("KR");
-  const [page, setPage] = useState("home");
-  const [selected, setSelected] = useState(null);
-  const t = DATA[lang];
+  const [items, setItems] = useState(liveData.slice(0, 4));
+  const [step, setStep] = useState(0);
 
-  const goService = (service) => {
-    setSelected(service);
-    setPage("service");
-    window.scrollTo(0, 0);
-  };
+  useEffect(() => {
+    const liveTimer = setInterval(() => {
+      setItems((prev) => {
+        const next = liveData[Math.floor(Math.random() * liveData.length)];
+        return [next, ...prev].slice(0, 4);
+      });
+    }, 1800);
+
+    const stepTimer = setInterval(() => {
+      setStep((prev) => (prev + 1) % 5);
+    }, 1100);
+
+    return () => {
+      clearInterval(liveTimer);
+      clearInterval(stepTimer);
+    };
+  }, []);
 
   return (
-    <>
-      <style>{css}</style>
+    <main className="min-h-screen bg-[#050914] text-white overflow-hidden">
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(0,217,255,.22),transparent_35%),radial-gradient(circle_at_20%_40%,rgba(112,0,255,.2),transparent_32%)] pointer-events-none" />
 
-      <div className="app">
-        <div className="glow glowA" />
-        <div className="glow glowB" />
-        <div className="gridBg" />
+      <section className="relative max-w-7xl mx-auto px-5 py-6">
+        <Header />
 
-        <main className="wrap">
-          <Header t={t} lang={lang} setLang={setLang} setPage={setPage} />
+        <div className="grid lg:grid-cols-2 gap-8 items-center mt-10 border border-cyan-400/25 rounded-[32px] p-6 md:p-10 bg-white/[0.03] shadow-2xl">
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-300/40 bg-cyan-400/10 text-cyan-300 text-sm font-bold mb-6">
+              ⚙ AI OPERATED PLATFORM
+            </div>
 
-          {page === "home" && (
-            <Home t={t} setPage={setPage} goService={goService} />
-          )}
+            <h1 className="text-4xl md:text-6xl font-black leading-tight">
+              AI가 인도네시아
+              <br />
+              입국부터 정착까지
+              <br />
+              <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 text-transparent bg-clip-text">
+                자동으로 처리합니다
+              </span>
+            </h1>
 
-          {page === "signup" && (
-            <Auth mode="signup" t={t} setPage={setPage} />
-          )}
+            <p className="mt-6 text-lg md:text-xl text-slate-200 leading-relaxed">
+              여권 하나로 비자 · 세관 · 환전 · 픽업 · 차량 · 숙소까지
+              <br />
+              모든 절차가 자동 진행됩니다.
+            </p>
 
-          {page === "login" && (
-            <Auth mode="login" t={t} setPage={setPage} />
-          )}
+            <div className="mt-8 grid sm:grid-cols-2 gap-4">
+              <button className="h-16 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-400 font-bold text-lg shadow-lg shadow-cyan-500/25">
+                🛂 여권으로 시작하기 →
+              </button>
+              <button className="h-16 rounded-2xl border border-white/25 bg-white/5 font-bold text-lg">
+                👤 회원가입 / 로그인 →
+              </button>
+            </div>
 
-          {page === "service" && (
-            <Service t={t} item={selected} setPage={setPage} />
-          )}
+            <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-300">
+              <span>🤖 AI 자동 처리</span>
+              <span>🛡 안전한 결제</span>
+              <span>🔔 실시간 알림</span>
+              <span>🎧 전문 지원</span>
+            </div>
+          </div>
 
-          {page === "payment" && (
-            <Payment t={t} setPage={setPage} />
-          )}
+          <VisualGlobe step={step} />
+        </div>
 
-          {page === "mypage" && (
-            <MyPage t={t} setPage={setPage} />
-          )}
-        </main>
-      </div>
-    </>
+        <LiveStatus items={items} />
+
+        <AutoFlow step={step} />
+
+        <ServiceSection />
+
+        <WhySection />
+
+        <TrustSection />
+
+        <FinalCTA />
+
+        <footer className="text-center text-slate-500 text-sm py-8">
+          © 2025 SMILE AI Indonesia Platform. All rights reserved.
+        </footer>
+      </section>
+    </main>
   );
 }
 
-function Header({ t, lang, setLang, setPage }) {
+function Header() {
   return (
-    <header className="header">
-      <button className="brand" onClick={() => setPage("home")}>
-        <div className="brandIcon">Ai</div>
-        <div>
-          <strong>SMILE AI</strong>
-          <span>{t.title2}</span>
+    <header className="relative z-10 flex items-center justify-between border-b border-white/10 pb-5">
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 grid place-items-center font-black shadow-lg shadow-blue-500/40">
+          AI
         </div>
-      </button>
+        <div>
+          <div className="font-black text-xl">SMILE AI</div>
+          <div className="text-xs text-slate-300">Indonesia Platform</div>
+        </div>
+      </div>
 
-      <div className="langs">
-        {["KR", "ID", "EN", "CN"].map((x) => (
+      <div className="hidden md:flex rounded-xl border border-white/15 overflow-hidden">
+        {["KR", "ID", "EN", "CN"].map((v, i) => (
           <button
-            key={x}
-            className={lang === x ? "active" : ""}
-            onClick={() => setLang(x)}
+            key={v}
+            className={`px-5 py-2 text-sm ${
+              i === 0 ? "bg-blue-600 text-white" : "bg-white/5 text-slate-300"
+            }`}
           >
-            {x}
+            {v}
           </button>
         ))}
       </div>
@@ -225,284 +144,214 @@ function Header({ t, lang, setLang, setPage }) {
   );
 }
 
-function Home({ t, setPage, goService }) {
+function VisualGlobe({ step }) {
+  const icons = ["✈️", "🛂", "💱", "🚘", "🏨"];
+
   return (
-    <>
-      <section className="hero">
-        <div className="heroText">
-          <div className="badge">⚙ {t.badge}</div>
+    <div className="relative min-h-[420px] grid place-items-center">
+      <div className="absolute w-80 h-80 rounded-full bg-cyan-400/20 blur-3xl animate-pulse" />
+      <div className="relative w-72 h-72 md:w-96 md:h-96 rounded-full border border-cyan-300/40 bg-[radial-gradient(circle,rgba(0,213,255,.35),rgba(8,15,35,.85)_60%)] shadow-2xl shadow-cyan-500/30 grid place-items-center">
+        <div className="text-8xl md:text-9xl">🌐</div>
 
-          <h1>
-            {t.title1}
-            <br />
-            <span>{t.title2}</span>
-          </h1>
-
-          <p>{t.subtitle}</p>
-
-          <button className="primary" onClick={() => setPage("signup")}>
-            <span>🛂 {t.start}</span>
-            <b>→</b>
-          </button>
-
-          <button className="secondary" onClick={() => setPage("login")}>
-            <span>👤 {t.loginJoin}</span>
-            <b>→</b>
-          </button>
-
-          <div className="features">
-            <span>⚙ AI 자동 처리</span>
-            <span>🛡 안전한 결제</span>
-            <span>🔔 실시간 알림</span>
-            <span>🎧 전문 지원</span>
+        {icons.map((icon, i) => (
+          <div
+            key={i}
+            className={`absolute w-16 h-16 rounded-2xl grid place-items-center text-3xl border transition-all duration-500 ${
+              step === i
+                ? "scale-125 bg-cyan-400/30 border-cyan-300 shadow-lg shadow-cyan-400/50"
+                : "bg-white/5 border-white/20"
+            }`}
+            style={{
+              transform: `rotate(${i * 72}deg) translate(185px) rotate(-${
+                i * 72
+              }deg)`,
+            }}
+          >
+            {icon}
           </div>
-        </div>
-
-        <div className="visual">
-          <div className="earth">
-            <div className="earthGlow" />
-            <div className="earthIcon">🌐</div>
-            <div className="orbit orbit1" />
-            <div className="orbit orbit2" />
-            <span className="sat sat1">🛂</span>
-            <span className="sat sat2">🚗</span>
-            <span className="sat sat3">💱</span>
-            <span className="sat sat4">🏨</span>
-          </div>
-        </div>
-      </section>
-
-      <section className="serviceHead">
-        <h2>✦ {t.servicesTitle}</h2>
-        <button onClick={() => setPage("mypage")}>{t.mypage}</button>
-      </section>
-
-      <section className="cards">
-        {t.services.map((item, i) => (
-          <button className={`card c${i}`} key={item[0]} onClick={() => goService(item)}>
-            <div className="icon">{item[1]}</div>
-            <strong>{item[2]}</strong>
-            <small>{item[3]}</small>
-            <em>→</em>
-          </button>
         ))}
-      </section>
-
-      <section className="bottom">
-        <div className="payment">
-          <div className="shield">🛡</div>
-          <p>
-            <b>{t.payment}</b>
-            <br />
-            {t.paymentSub}
-          </p>
-        </div>
-
-        <button className="kakao" onClick={() => window.open(KAKAO, "_blank")}>
-          💬 {t.kakao}
-          <small>실시간 상담 연결</small>
-        </button>
-
-        <button className="whatsapp" onClick={() => window.open(WHATSAPP, "_blank")}>
-          🟢 {t.whatsapp}
-          <small>+82 10-2737-8821</small>
-        </button>
-      </section>
-
-      <footer>© 2026 SMILE AI Indonesia Platform</footer>
-    </>
+      </div>
+    </div>
   );
 }
 
-function Auth({ mode, t, setPage }) {
-  const signup = mode === "signup";
-
+function LiveStatus({ items }) {
   return (
-    <section className="authPage">
-      <button className="back" onClick={() => setPage("home")}>← {t.back}</button>
+    <section className="mt-8 grid lg:grid-cols-3 gap-5">
+      <div className="lg:col-span-2 rounded-3xl border border-cyan-400/25 bg-white/[0.04] p-6">
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-2xl font-black">실시간 진행 상황</h2>
+          <span className="text-cyan-300 text-sm animate-pulse">
+            ● LIVE OPERATING
+          </span>
+        </div>
 
-      <div className="authCard">
-        <div className="authIcon">{signup ? "👤" : "🔐"}</div>
-        <h1>{signup ? t.signup : t.login}</h1>
-        <p>SMILE AI 플랫폼의 모든 서비스를 이용해보세요.</p>
+        <div className="space-y-3">
+          {items.map(([name, status, color], i) => (
+            <div
+              key={i + name + status}
+              className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-5 py-4"
+            >
+              <span className="font-bold text-slate-200">{name}</span>
+              <span
+                className={`font-bold ${
+                  color === "success"
+                    ? "text-emerald-300"
+                    : color === "blue"
+                    ? "text-cyan-300"
+                    : "text-purple-300"
+                }`}
+              >
+                {status}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-        {signup && <input placeholder={t.name} />}
-        <input placeholder={t.email} />
-        {signup && <input placeholder={t.phone} />}
-        {!signup && <input placeholder={t.password} type="password" />}
-
-        {signup && (
-          <label className="check">
-            <input type="checkbox" />
-            <span>{t.agree}</span>
-          </label>
-        )}
-
-        <button className="primary full" onClick={() => setPage("mypage")}>
-          <span>{signup ? t.submit : t.login}</span>
-          <b>→</b>
-        </button>
-
-        <button className="yellowLine" onClick={() => window.open(KAKAO, "_blank")}>
-          💬 {t.kakao}
-        </button>
+      <div className="rounded-3xl border border-purple-400/25 bg-gradient-to-br from-purple-500/10 to-cyan-500/10 p-6">
+        <h3 className="text-xl font-black mb-4">지금도 시스템이 처리 중입니다</h3>
+        <p className="text-slate-300 leading-relaxed">
+          신청, 결제, 승인, 배정 기록은 마이페이지에서 실시간으로 확인됩니다.
+        </p>
       </div>
     </section>
   );
 }
 
-function Service({ t, item, setPage }) {
-  const service = item || t.services[0];
+function AutoFlow({ step }) {
+  const steps = ["여권 입력", "AI 분석", "자동 신청", "실시간 처리", "완료"];
 
   return (
-    <section className="page">
-      <button className="back" onClick={() => setPage("home")}>← {t.back}</button>
+    <section className="mt-8 rounded-3xl border border-blue-400/20 bg-white/[0.04] p-6">
+      <h2 className="text-2xl font-black mb-2">AI 자동 처리 흐름</h2>
+      <p className="text-slate-300 mb-6">
+        여권 정보만 입력하면 AI가 필요한 절차를 자동으로 연결하고 진행합니다.
+      </p>
 
-      <div className="pageHero">
-        <div>
-          <div className="badge">AI APPLICATION FLOW</div>
-          <h1>{service[1]} {service[2]}</h1>
-          <p>{service[3]} 신청 정보를 입력하면 AI가 필요한 서류와 다음 단계를 안내합니다.</p>
+      <div className="grid md:grid-cols-5 gap-4">
+        {steps.map((s, i) => (
+          <div
+            key={s}
+            className={`rounded-2xl p-5 border transition-all duration-500 ${
+              step >= i
+                ? "border-cyan-300 bg-cyan-400/10 shadow-lg shadow-cyan-400/20"
+                : "border-white/10 bg-black/20"
+            }`}
+          >
+            <div className="text-3xl mb-3">{["🛂", "🤖", "📨", "📊", "✅"][i]}</div>
+            <div className="font-black">{s}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ServiceSection() {
+  return (
+    <section className="mt-8">
+      <h2 className="text-2xl font-black mb-5">서비스 바로가기</h2>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {services.map(([icon, title, en, desc]) => (
+          <div
+            key={title}
+            className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 hover:border-cyan-300/60 hover:bg-cyan-400/10 transition"
+          >
+            <div className="text-4xl mb-4">{icon}</div>
+            <div className="font-black text-lg">{title}</div>
+            <div className="text-sm text-slate-400 mb-3">{en}</div>
+            <div className="text-sm text-slate-300 leading-relaxed">{desc}</div>
+            <div className="text-right text-cyan-300 mt-4">→</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function WhySection() {
+  const why = [
+    ["AI 자동 처리", "여권 정보만 입력하면 모든 절차를 자동으로 연결합니다"],
+    ["실시간 진행 확인", "모든 진행상황은 마이페이지에서 실시간 확인 가능합니다"],
+    ["온체인 기록 저장", "모든 신청, 결제, 승인 기록은 위변조 불가능한 방식으로 저장됩니다"],
+    ["자동 알림 시스템", "비자 만료, 승인 완료, 수령 안내를 자동으로 제공합니다"],
+    ["개인정보 보호", "모든 데이터는 1년 후 자동 삭제됩니다"],
+  ];
+
+  return (
+    <section className="mt-8 rounded-3xl border border-cyan-400/25 bg-gradient-to-br from-white/[0.06] to-cyan-400/[0.04] p-6 md:p-8">
+      <h2 className="text-3xl font-black mb-6">왜 이 플랫폼을 사용하는가</h2>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        {why.map(([title, text], i) => (
+          <div key={title} className="rounded-2xl bg-black/25 border border-white/10 p-5">
+            <div className="text-cyan-300 font-black mb-2">
+              {i + 1}. {title}
+            </div>
+            <p className="text-slate-300">{text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function TrustSection() {
+  return (
+    <section className="mt-8 grid lg:grid-cols-2 gap-5">
+      <div className="rounded-3xl border border-purple-400/30 bg-purple-500/10 p-7">
+        <h2 className="text-3xl font-black mb-4">
+          모든 기록은 위변조가 불가능한 방식으로 저장됩니다
+        </h2>
+        <p className="text-slate-300 leading-relaxed">
+          신청 기록, 결제 기록, 비자 승인 기록은 신뢰 가능한 방식으로 보관되며
+          사용자 요청 또는 1년 경과 시 자동 삭제됩니다.
+        </p>
+      </div>
+
+      <div className="rounded-3xl border border-cyan-400/30 bg-black/25 p-7">
+        <div className="grid grid-cols-3 gap-4 text-center">
+          {["신청 기록", "결제 기록", "승인 기록"].map((v) => (
+            <div
+              key={v}
+              className="rounded-2xl border border-cyan-300/25 bg-cyan-400/10 p-5"
+            >
+              <div className="text-3xl mb-2">🔐</div>
+              <div className="font-black">{v}</div>
+            </div>
+          ))}
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <button className="primary smallBtn" onClick={() => setPage("payment")}>
-          {t.pay} →
+function FinalCTA() {
+  return (
+    <section className="mt-8 rounded-3xl border border-cyan-300/30 bg-gradient-to-r from-blue-600/20 to-cyan-400/20 p-8 text-center">
+      <h2 className="text-3xl md:text-4xl font-black mb-4">
+        지금 시작하면 모든 절차가 자동으로 진행됩니다
+      </h2>
+
+      <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+        <button className="px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-400 font-black">
+          여권으로 시작하기 →
         </button>
-      </div>
-
-      <div className="formGrid">
-        <input placeholder={t.name} />
-        <input placeholder={t.email} />
-        <input placeholder={t.phone} />
-        <input placeholder="국적 / Nationality" />
-        <input placeholder="여권번호 / Passport No." />
-        <input placeholder="도착 예정일 / Arrival Date" />
-        <input placeholder="체류 주소 / Address in Indonesia" />
-        <input placeholder="요청 서비스 옵션" />
-        <textarea placeholder="추가 요청사항" />
-      </div>
-    </section>
-  );
-}
-
-function Payment({ t, setPage }) {
-  return (
-    <section className="page">
-      <button className="back" onClick={() => setPage("home")}>← {t.back}</button>
-
-      <div className="pageHero">
-        <div>
-          <div className="badge">PAYMENT SYSTEM</div>
-          <h1>💳 {t.pay}</h1>
-          <p>{t.payment}</p>
-        </div>
-      </div>
-
-      <div className="cards">
-        <button className="card c0">🇮🇩 IDR<br /><small>BCA / GoPay / OVO / ShopeePay</small></button>
-        <button className="card c1">🇰🇷 KRW<br /><small>케이뱅크</small></button>
-        <button className="card c2">🌐 USDT<br /><small>자동 환율 계산 예정</small></button>
-        <button className="card c3">📄 Receipt<br /><small>마이페이지 저장</small></button>
+        <a
+          href={WHATSAPP}
+          className="px-8 py-4 rounded-2xl bg-green-500 font-black"
+        >
+          WhatsApp 상담
+        </a>
+        <a
+          href={KAKAO}
+          className="px-8 py-4 rounded-2xl bg-yellow-400 text-black font-black"
+        >
+          KakaoTalk 상담
+        </a>
       </div>
     </section>
   );
 }
-
-function MyPage({ t, setPage }) {
-  return (
-    <section className="page">
-      <button className="back" onClick={() => setPage("home")}>← {t.back}</button>
-
-      <div className="pageHero">
-        <div>
-          <div className="badge">MY PAGE</div>
-          <h1>📊 {t.status}</h1>
-          <p>신청 상태, 결제 확인, 승인 완료, 비자 다운로드를 확인합니다.</p>
-        </div>
-      </div>
-
-      <div className="timeline">
-        <div className="done">● 신청 접수</div>
-        <div className="done">● 결제 확인</div>
-        <div className="now">◐ 서류 검토</div>
-        <div>○ 이민국 제출</div>
-        <div>○ 승인 완료 / 다운로드</div>
-      </div>
-    </section>
-  );
-}
-
-const css = `
-*{box-sizing:border-box}
-body{margin:0;background:#020617}
-.app{
-  min-height:100vh;
-  color:white;
-  font-family:Arial,sans-serif;
-  background:
-    radial-gradient(circle at 75% 8%, rgba(0,229,255,.28), transparent 34%),
-    radial-gradient(circle at 12% 85%, rgba(168,85,247,.28), transparent 36%),
-    linear-gradient(135deg,#020617,#06152e 44%,#020617);
-  overflow-x:hidden;
-  position:relative;
-}
-.gridBg{
-  position:fixed;inset:0;
-  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:60px 60px;
-  mask-image:linear-gradient(to bottom,transparent,black 20%,black 80%,transparent);
-  pointer-events:none;
-}
-.glow{position:fixed;border-radius:999px;filter:blur(90px);pointer-events:none}
-.glowA{width:430px;height:430px;right:-130px;top:-130px;background:rgba(0,229,255,.3)}
-.glowB{width:390px;height:390px;left:-120px;bottom:-120px;background:rgba(168,85,247,.3)}
-.wrap{width:min(1180px,100%);margin:0 auto;padding:28px 24px;position:relative;z-index:2}
-.header{display:flex;justify-content:space-between;align-items:center;padding-bottom:22px;margin-bottom:28px;border-bottom:1px solid rgba(255,255,255,.1)}
-.brand{display:flex;align-items:center;gap:13px;background:none;border:0;color:white;text-align:left;cursor:pointer}
-.brandIcon{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:22px;background:linear-gradient(135deg,#2563eb,#00e5ff,#a855f7);box-shadow:0 0 45px rgba(0,229,255,.55)}
-.brand strong{display:block;font-size:24px}
-.brand span{font-size:12px;color:#cbd5e1;font-weight:800}
-.langs{display:flex;gap:8px;padding:5px;border-radius:18px;background:rgba(2,6,23,.65);border:1px solid rgba(255,255,255,.13)}
-.langs button{border:0;border-radius:13px;padding:10px 18px;background:rgba(15,23,42,.9);color:#cbd5e1;font-weight:900;cursor:pointer}
-.langs .active{background:linear-gradient(90deg,#2563eb,#00e5ff);color:white;box-shadow:0 0 24px rgba(0,229,255,.4)}
-.hero{display:grid;grid-template-columns:1fr 1.08fr;gap:34px;align-items:center;padding:36px;border-radius:38px;background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(30,64,175,.18));border:1px solid rgba(0,229,255,.38);box-shadow:0 0 55px rgba(0,229,255,.14),0 35px 100px rgba(0,0,0,.48)}
-.badge{display:inline-block;padding:10px 17px;border-radius:999px;background:rgba(0,229,255,.14);border:1px solid rgba(0,229,255,.35);color:#00e5ff;font-size:13px;font-weight:900;box-shadow:0 0 25px rgba(0,229,255,.22)}
-.hero h1{font-size:clamp(42px,5.2vw,72px);line-height:1.02;margin:22px 0 18px;letter-spacing:-1.5px}
-.hero h1 span{background:linear-gradient(90deg,#00e5ff,#60a5fa,#f472b6);-webkit-background-clip:text;color:transparent}
-.hero p{font-size:19px;line-height:1.6;color:#dbeafe;max-width:560px}
-.primary,.secondary{width:100%;max-width:440px;margin-top:14px;border-radius:18px;padding:18px 22px;font-size:17px;font-weight:900;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.primary{border:0;background:linear-gradient(90deg,#2563eb,#00e5ff,#00ff99);color:white;box-shadow:0 0 38px rgba(0,229,255,.4)}
-.secondary{border:1px solid rgba(0,229,255,.4);background:rgba(2,6,23,.68);color:white}
-.features{display:flex;flex-wrap:wrap;gap:18px;margin-top:24px;color:#cbd5e1;font-size:15px}
-.visual{min-height:410px;display:grid;place-items:center;position:relative;border-radius:34px;background:radial-gradient(circle,rgba(0,229,255,.34),transparent 38%),radial-gradient(circle,rgba(168,85,247,.18),transparent 58%)}
-.earth{position:relative;width:330px;height:330px;display:grid;place-items:center}
-.earthGlow{position:absolute;width:240px;height:240px;background:#00e5ff;border-radius:50%;filter:blur(55px);opacity:.38}
-.earthIcon{position:relative;font-size:175px;filter:drop-shadow(0 0 42px #00e5ff);animation:float 4s ease-in-out infinite}
-.orbit{position:absolute;border:1px solid rgba(125,211,252,.58);border-radius:50%;box-shadow:0 0 28px rgba(0,229,255,.24)}
-.orbit1{width:390px;height:140px;transform:rotate(-18deg)}
-.orbit2{width:340px;height:105px;transform:rotate(24deg)}
-.sat{position:absolute;width:70px;height:70px;border-radius:50%;display:grid;place-items:center;background:rgba(15,23,42,.75);border:1px solid rgba(255,255,255,.2);box-shadow:0 0 34px rgba(0,229,255,.35);font-size:30px}
-.sat1{left:5px;top:120px}.sat2{right:0;top:145px}.sat3{right:40px;bottom:40px}.sat4{right:70px;top:25px}
-.serviceHead{display:flex;justify-content:space-between;align-items:center;margin:36px 0 18px}
-.serviceHead h2{font-size:30px;margin:0}
-.serviceHead button{border:1px solid rgba(0,229,255,.32);background:rgba(15,23,42,.8);color:white;border-radius:16px;padding:12px 18px;font-weight:900;cursor:pointer}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.card{min-height:136px;border:1px solid rgba(255,255,255,.14);border-radius:24px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(30,41,59,.66));color:white;padding:22px;text-align:left;position:relative;overflow:hidden;box-shadow:0 22px 50px rgba(0,0,0,.28);cursor:pointer}
-.card:before{content:"";position:absolute;inset:-1px;opacity:.38;background:radial-gradient(circle at 20% 15%,#00e5ff,transparent 38%)}
-.c1:before{background:radial-gradient(circle at 20% 15%,#22c55e,transparent 38%)}.c2:before{background:radial-gradient(circle at 20% 15%,#a855f7,transparent 38%)}.c3:before{background:radial-gradient(circle at 20% 15%,#38bdf8,transparent 38%)}.c4:before{background:radial-gradient(circle at 20% 15%,#06b6d4,transparent 38%)}.c5:before{background:radial-gradient(circle at 20% 15%,#f472b6,transparent 38%)}.c6:before{background:radial-gradient(circle at 20% 15%,#f59e0b,transparent 38%)}.c7:before{background:radial-gradient(circle at 20% 15%,#3b82f6,transparent 38%)}
-.icon{font-size:38px;margin-bottom:14px;position:relative}.card strong{display:block;font-size:18px;position:relative}.card small{display:block;color:#cbd5e1;margin-top:7px;position:relative}.card em{position:absolute;right:20px;bottom:18px;font-style:normal;color:#cbd5e1;font-size:24px}
-.bottom{display:grid;grid-template-columns:1.5fr .7fr .7fr;gap:16px;margin-top:24px}
-.payment{display:flex;gap:16px;align-items:center;padding:20px;border-radius:24px;background:rgba(37,99,235,.18);border:1px solid rgba(59,130,246,.48);box-shadow:inset 0 0 30px rgba(0,229,255,.08)}
-.shield{font-size:42px}.payment p{margin:0;color:#dbeafe;line-height:1.55}
-.kakao,.whatsapp{border:0;border-radius:22px;padding:18px;font-size:17px;font-weight:900;cursor:pointer}.kakao{background:#fde047;color:#111827}.whatsapp{background:#22c55e;color:white;display:grid;place-items:center}.kakao small,.whatsapp small{display:block;margin-top:5px;font-size:13px}
-footer{text-align:center;color:#64748b;margin:30px 0}
-.authPage,.page{max-width:760px;margin:0 auto}.back{background:transparent;color:white;border:0;font-size:16px;margin-bottom:16px;cursor:pointer}
-.authCard,.pageHero{padding:38px;border-radius:34px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(30,64,175,.22));border:1px solid rgba(0,229,255,.4);box-shadow:0 0 48px rgba(0,229,255,.14),0 35px 100px rgba(0,0,0,.45)}
-.authCard{text-align:center}.authIcon{width:100px;height:100px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;font-size:44px;background:radial-gradient(circle,#8b5cf6,#1e1b4b);box-shadow:0 0 46px rgba(168,85,247,.58)}
-.authCard p,.pageHero p{color:#cbd5e1}.authCard input,.formGrid input,.formGrid textarea{width:100%;padding:17px;margin-top:14px;border-radius:16px;border:1px solid rgba(0,229,255,.35);background:rgba(2,6,23,.75);color:white;font-size:16px}
-.check{display:flex;gap:10px;text-align:left;margin-top:16px;color:#cbd5e1;font-size:14px}.full{max-width:100%}.yellowLine{width:100%;padding:17px;margin-top:14px;border-radius:16px;background:transparent;color:#fde047;border:1px solid #fde047;font-weight:900;font-size:16px;cursor:pointer}
-.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.formGrid textarea{grid-column:1/-1;min-height:110px}
-.smallBtn{max-width:260px}.timeline{display:grid;gap:12px;margin-top:18px}.timeline div{padding:16px;border-radius:16px;background:rgba(15,23,42,.84);border:1px solid rgba(0,229,255,.22)}.done{color:#22c55e}.now{color:#00e5ff}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-@media(max-width:900px){.wrap{padding:16px 14px}.header{gap:12px;align-items:flex-start}.brand strong{font-size:18px}.brandIcon{width:44px;height:44px}.langs{transform:scale(.86);transform-origin:right top}.hero{grid-template-columns:1fr;padding:22px}.visual{min-height:250px}.earth{width:230px;height:230px}.earthIcon{font-size:125px}.orbit1{width:260px;height:95px}.orbit2{width:230px;height:75px}.sat{width:52px;height:52px;font-size:23px}.cards{grid-template-columns:repeat(2,1fr)}.bottom{grid-template-columns:1fr}.formGrid{grid-template-columns:1fr}.hero h1{font-size:42px}}
-`;
