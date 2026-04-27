@@ -1,378 +1,930 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import React, { useEffect, useMemo, useState } from "react";
 
-const LANGS = ["KR", "ID", "EN", "CN"];
+/* ================= LANGUAGE ================= */
 
-const T = {
+const TEXT = {
   KR: {
-    start: "시작하기",
+    navHome: "홈",
     login: "로그인",
-    signup: "회원가입",
-    hero1: "여권 하나만 올리세요.",
-    hero2: "AI가 인도네시아 입국부터 정착까지",
-    hero3: "전부 처리합니다.",
-    desc: "비자 · 세관신고 · 환전 · 공항픽업 · 차량 · 숙소 · 장기체류까지 자동으로 연결됩니다.",
-    cta: "여권으로 시작하기",
-    support: "상담하기",
-    live: "AI 자동 처리 현황",
-    today: "오늘 처리",
-    active: "진행중",
-    approved: "승인완료",
-    alert: "알림발송",
-    services: "AI 자동 실행 서비스",
-    why: "왜 이 플랫폼을 사용하는가",
-    dashboard: "회원 대시보드",
-    passport: "여권 업로드",
-    name: "이름",
+    dashboard: "마이페이지",
+    heroBadge: "INDONESIA AI ENTRY PLATFORM",
+    heroTitle: "AI가 인도네시아 입국부터 정착까지 자동 처리합니다",
+    heroSub:
+      "비자 · 세관신고 · 환전 · 공항픽업 · 차량렌트 · 숙소 · 알림까지 하나의 플랫폼에서 진행됩니다.",
+    start: "여권으로 시작하기",
+    trust: "신뢰 기반 자동 처리",
+    liveTitle: "실시간 자동 처리 현황",
+    whyTitle: "왜 이 플랫폼을 이용해야 하는가",
+    flowTitle: "AI 업무 처리 흐름",
+    servicesTitle: "서비스",
+    loginTitle: "회원 로그인",
     email: "이메일",
-    phone: "전화번호",
     password: "비밀번호",
-    signupGo: "가입하고 대시보드로 이동",
-    loginGo: "로그인하고 대시보드로 이동",
-    upload: "여권 파일 업로드",
-    analyze: "AI 분석 시작",
-    back: "돌아가기",
-  },
-  ID: {
-    start: "Mulai",
-    login: "Masuk",
-    signup: "Daftar",
-    hero1: "Upload paspor saja.",
-    hero2: "AI mengurus masuk hingga menetap",
-    hero3: "semuanya otomatis.",
-    desc: "Visa · bea cukai · penukaran uang · pickup bandara · mobil · akomodasi · tinggal lama terhubung otomatis.",
-    cta: "Mulai dengan Paspor",
-    support: "Konsultasi",
-    live: "Status Otomatis AI",
-    today: "Diproses",
-    active: "Berjalan",
-    approved: "Disetujui",
-    alert: "Notifikasi",
-    services: "Layanan Otomatis AI",
-    why: "Mengapa menggunakan platform ini",
-    dashboard: "Dashboard Member",
-    passport: "Upload Paspor",
-    name: "Nama",
-    email: "Email",
-    phone: "Nomor Telepon",
-    password: "Kata Sandi",
-    signupGo: "Daftar dan Masuk Dashboard",
-    loginGo: "Masuk Dashboard",
-    upload: "Upload File Paspor",
-    analyze: "Mulai Analisis AI",
-    back: "Kembali",
+    loginBtn: "마이페이지 입장",
+    dashTitle: "AI 마이페이지",
+    dashSub: "회원가입 후 모든 신청, 결제, 진행상태 확인은 이곳에서 실행됩니다.",
+    services: ["비자 신청", "세관 신고", "환전 신청", "공항 픽업", "차량 렌트", "숙소 예약"],
+    why: [
+      "AI 자동 서류 체크",
+      "실시간 진행 상태",
+      "고객명 보호 표시",
+      "온체인 기록 보관",
+      "만료 후 자동 삭제",
+      "다국어 알림 발송",
+    ],
+    flow: ["여권 업로드", "AI 분석", "서류 자동 분류", "결제", "담당자 배정", "진행 완료"],
   },
   EN: {
-    start: "Start",
+    navHome: "Home",
     login: "Login",
-    signup: "Sign Up",
-    hero1: "Upload only your passport.",
-    hero2: "AI handles entry to settlement",
-    hero3: "automatically.",
-    desc: "Visa · customs · exchange · airport pickup · vehicle · accommodation · long stay are connected automatically.",
-    cta: "Start with Passport",
-    support: "Support",
-    live: "AI Automation Status",
-    today: "Processed",
-    active: "Active",
-    approved: "Approved",
-    alert: "Alerts",
-    services: "AI Automated Services",
-    why: "Why use this platform",
-    dashboard: "Member Dashboard",
-    passport: "Passport Upload",
-    name: "Name",
+    dashboard: "Dashboard",
+    heroBadge: "INDONESIA AI ENTRY PLATFORM",
+    heroTitle: "AI automates your journey from arrival to settlement",
+    heroSub:
+      "Visa, customs, exchange, airport pickup, car rental, accommodation and alerts in one platform.",
+    start: "Start with Passport",
+    trust: "Trusted automated processing",
+    liveTitle: "Live AI Processing",
+    whyTitle: "Why use this platform",
+    flowTitle: "AI Workflow",
+    servicesTitle: "Services",
+    loginTitle: "Member Login",
     email: "Email",
-    phone: "Phone Number",
     password: "Password",
-    signupGo: "Sign Up and Open Dashboard",
-    loginGo: "Login and Open Dashboard",
-    upload: "Upload Passport File",
-    analyze: "Start AI Analysis",
-    back: "Back",
+    loginBtn: "Enter Dashboard",
+    dashTitle: "AI Dashboard",
+    dashSub: "After signup, all applications, payments and tracking are handled here.",
+    services: ["Visa", "Customs", "Exchange", "Airport Pickup", "Car Rental", "Accommodation"],
+    why: [
+      "AI document check",
+      "Real-time tracking",
+      "Masked customer data",
+      "On-chain records",
+      "Auto deletion",
+      "Multilingual alerts",
+    ],
+    flow: ["Passport Upload", "AI Analysis", "Auto Sorting", "Payment", "Agent Assigned", "Completed"],
+  },
+  ID: {
+    navHome: "Beranda",
+    login: "Masuk",
+    dashboard: "Dashboard",
+    heroBadge: "PLATFORM AI MASUK INDONESIA",
+    heroTitle: "AI mengurus perjalanan Anda dari masuk hingga menetap di Indonesia",
+    heroSub:
+      "Visa, bea cukai, penukaran uang, jemput bandara, sewa mobil, akomodasi dan notifikasi dalam satu platform.",
+    start: "Mulai dengan Paspor",
+    trust: "Proses otomatis terpercaya",
+    liveTitle: "Proses AI Real-time",
+    whyTitle: "Mengapa memakai platform ini",
+    flowTitle: "Alur Kerja AI",
+    servicesTitle: "Layanan",
+    loginTitle: "Login Member",
+    email: "Email",
+    password: "Kata sandi",
+    loginBtn: "Masuk Dashboard",
+    dashTitle: "Dashboard AI",
+    dashSub: "Setelah daftar, semua pengajuan, pembayaran dan status diproses di sini.",
+    services: ["Visa", "Deklarasi Bea Cukai", "Penukaran Uang", "Jemput Bandara", "Sewa Mobil", "Akomodasi"],
+    why: [
+      "Cek dokumen AI",
+      "Status real-time",
+      "Nama pelanggan disamarkan",
+      "Catatan on-chain",
+      "Hapus otomatis",
+      "Notifikasi multibahasa",
+    ],
+    flow: ["Upload Paspor", "Analisis AI", "Klasifikasi Dokumen", "Pembayaran", "Petugas Ditugaskan", "Selesai"],
   },
   CN: {
-    start: "开始",
+    navHome: "首页",
     login: "登录",
-    signup: "注册",
-    hero1: "只需上传护照。",
-    hero2: "AI 自动处理入境到定居",
-    hero3: "全部流程。",
-    desc: "签证 · 海关申报 · 换汇 · 接机 · 车辆 · 住宿 · 长期居留全部自动连接。",
-    cta: "用护照开始",
-    support: "咨询",
-    live: "AI 自动处理状态",
-    today: "今日处理",
-    active: "进行中",
-    approved: "已批准",
-    alert: "通知发送",
-    services: "AI 自动服务",
-    why: "为什么使用此平台",
-    dashboard: "会员仪表板",
-    passport: "护照上传",
-    name: "姓名",
+    dashboard: "我的页面",
+    heroBadge: "印尼 AI 入境平台",
+    heroTitle: "AI 自动处理从入境到定居的全部流程",
+    heroSub:
+      "签证、海关申报、换汇、机场接送、租车、住宿和通知都在一个平台完成。",
+    start: "用护照开始",
+    trust: "可信赖的自动处理",
+    liveTitle: "实时 AI 处理状态",
+    whyTitle: "为什么选择本平台",
+    flowTitle: "AI 工作流程",
+    servicesTitle: "服务",
+    loginTitle: "会员登录",
     email: "邮箱",
-    phone: "电话号码",
     password: "密码",
-    signupGo: "注册并进入仪表板",
-    loginGo: "登录并进入仪表板",
-    upload: "上传护照文件",
-    analyze: "开始 AI 分析",
-    back: "返回",
+    loginBtn: "进入我的页面",
+    dashTitle: "AI 我的页面",
+    dashSub: "注册后，所有申请、付款和进度确认都在这里执行。",
+    services: ["签证申请", "海关申报", "换汇申请", "机场接送", "车辆租赁", "住宿预约"],
+    why: [
+      "AI 文件检查",
+      "实时状态追踪",
+      "客户姓名隐藏",
+      "链上记录保存",
+      "到期自动删除",
+      "多语言通知",
+    ],
+    flow: ["上传护照", "AI 分析", "文件自动分类", "付款", "负责人分配", "处理完成"],
   },
 };
 
-const services = {
-  KR: ["비자", "세관", "환전", "픽업", "차량", "숙소", "장기체류", "진행조회"],
-  ID: ["Visa", "Bea Cukai", "Penukaran", "Pickup", "Mobil", "Akomodasi", "Tinggal Lama", "Status"],
-  EN: ["Visa", "Customs", "Exchange", "Pickup", "Vehicle", "Stay", "Long Stay", "Status"],
-  CN: ["签证", "海关", "换汇", "接机", "车辆", "住宿", "长期居留", "进度"],
-};
-
-const icons = ["V", "C", "E", "P", "R", "S", "L", "✓"];
+/* ================= APP ================= */
 
 export default function App() {
   const [lang, setLang] = useState("KR");
   const [page, setPage] = useState("home");
-  const [pulse, setPulse] = useState(0);
-  const [stats, setStats] = useState({ today: 128, active: 23, approved: 91, alert: 47 });
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const t = T[lang];
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setPulse((v) => (v + 1) % 8);
-      setStats((s) => ({
-        today: s.today + Math.floor(Math.random() * 3),
-        active: 18 + Math.floor(Math.random() * 12),
-        approved: 88 + Math.floor(Math.random() * 9),
-        alert: s.alert + Math.floor(Math.random() * 2),
-      }));
-    }, 1300);
-    return () => clearInterval(timer);
-  }, []);
-
-  if (page === "signup") return <Auth type="signup" t={t} lang={lang} setLang={setLang} setPage={setPage} />;
-  if (page === "login") return <Auth type="login" t={t} lang={lang} setLang={setLang} setPage={setPage} />;
-  if (page === "dashboard") return <Dashboard t={t} lang={lang} setLang={setLang} setPage={setPage} pulse={pulse} />;
-  if (page === "passport") return <Passport t={t} lang={lang} setLang={setLang} setPage={setPage} />;
+  const t = TEXT[lang];
 
   return (
-    <main className="app">
-      <Background />
-      <Header t={t} lang={lang} setLang={setLang} setPage={setPage} />
+    <div className="app">
+      <style>{css}</style>
 
-      <section className="hero">
-        <div className="heroText">
-          <div className="badge"><span /> AI AUTONOMOUS PLATFORM</div>
-          <h1>{t.hero1}<br />{t.hero2}<br /><em>{t.hero3}</em></h1>
-          <p>{t.desc}</p>
+      <Header
+        t={t}
+        lang={lang}
+        setLang={setLang}
+        page={page}
+        setPage={setPage}
+        loggedIn={loggedIn}
+      />
 
-          <div className="heroBtns">
-            <button className="primary" onClick={() => setPage("signup")}>{t.cta}</button>
-            <button className="ghost" onClick={() => setPage("login")}>{t.login}</button>
-          </div>
-        </div>
-
-        <div className="visual">
-          <div className="orbitRing r1" />
-          <div className="orbitRing r2" />
-          <div className="beam b1" />
-          <div className="beam b2" />
-
-          <div className="core">
-            <strong>AI</strong>
-            <small>AUTO ROUTING</small>
-          </div>
-
-          {services[lang].slice(0, 6).map((s, i) => (
-            <div className={`node n${i} ${pulse === i ? "on" : ""}`} key={s}>
-              <b>{icons[i]}</b>
-              <span>{s}</span>
-            </div>
-          ))}
-
-          <div className="passport">PASSPORT INPUT</div>
-        </div>
-      </section>
-
-      <section className="stats">
-        <div className="statTitle">
-          <h2>{t.live}</h2>
-          <p>LIVE SYSTEM OPERATING</p>
-        </div>
-        <Stat label={t.today} value={stats.today} />
-        <Stat label={t.active} value={stats.active} />
-        <Stat label={t.approved} value={`${stats.approved}%`} />
-        <Stat label={t.alert} value={stats.alert} />
-      </section>
-
-      <section className="services">
-        <h2>{t.services}</h2>
-        <div className="serviceGrid">
-          {services[lang].map((s, i) => (
-            <button className="service" key={s} onClick={() => setPage("signup")}>
-              <b>{icons[i]}</b>
-              <strong>{s}</strong>
-              <span>AUTO PROCESS</span>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <section className="why">
-        <div>
-          <h2>{t.why}</h2>
-          <p>{t.desc}</p>
-        </div>
-        <div className="whyCards">
-          <div>AI AUTO</div>
-          <div>REAL TIME</div>
-          <div>ON-CHAIN RECORD</div>
-          <div>DATA DELETE 1Y</div>
-        </div>
-      </section>
-
-      <section className="ctaBox">
-        <h2>{t.hero3}</h2>
-        <button className="primary" onClick={() => setPage("signup")}>{t.cta}</button>
-      </section>
-
-      <Floating t={t} />
-    </main>
+      {page === "home" && <Home t={t} setPage={setPage} />}
+      {page === "login" && (
+        <Login
+          t={t}
+          onLogin={() => {
+            setLoggedIn(true);
+            setPage("dashboard");
+          }}
+        />
+      )}
+      {page === "dashboard" && <Dashboard t={t} />}
+    </div>
   );
 }
 
-function Header({ t, lang, setLang, setPage }) {
+/* ================= HEADER ================= */
+
+function Header({ t, lang, setLang, setPage, loggedIn }) {
   return (
     <header className="header">
       <button className="brand" onClick={() => setPage("home")}>
-        <span>AI</span>
-        <div><strong>SMILE AI</strong><small>INDONESIA PLATFORM</small></div>
+        <span className="brandIcon">✦</span>
+        <span>SMILE AI GROUP</span>
       </button>
 
-      <nav>
-        <button onClick={() => setPage("signup")}>{t.start}</button>
-        <button onClick={() => setPage("login")}>{t.login}</button>
-      </nav>
+      <nav className="nav">
+        <button onClick={() => setPage("home")}>{t.navHome}</button>
 
-      <div className="langs">
-        {LANGS.map((l) => (
-          <button key={l} className={lang === l ? "active" : ""} onClick={() => setLang(l)}>{l}</button>
-        ))}
-      </div>
+        <div className="langs">
+          {["KR", "EN", "ID", "CN"].map((l) => (
+            <button
+              key={l}
+              className={lang === l ? "active" : ""}
+              onClick={() => setLang(l)}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+
+        <button
+          className="loginBtn"
+          onClick={() => setPage(loggedIn ? "dashboard" : "login")}
+        >
+          {loggedIn ? t.dashboard : t.login}
+        </button>
+      </nav>
     </header>
   );
 }
 
-function Background() {
+/* ================= HOME ================= */
+
+function Home({ t, setPage }) {
   return (
     <>
-      <div className="bgGrid" />
-      <div className="glow g1" />
-      <div className="glow g2" />
-      <div className="glow g3" />
+      <section className="hero">
+        <div className="heroText">
+          <div className="badge">{t.heroBadge}</div>
+          <h1>{t.heroTitle}</h1>
+          <p>{t.heroSub}</p>
+
+          <div className="heroActions">
+            <button className="primary" onClick={() => setPage("login")}>
+              {t.start} →
+            </button>
+            <div className="trust">● {t.trust}</div>
+          </div>
+        </div>
+
+        <HeroVisual />
+      </section>
+
+      <LivePanel t={t} />
+
+      <section className="section">
+        <h2>{t.whyTitle}</h2>
+        <div className="whyGrid">
+          {t.why.map((item, i) => (
+            <div className="glassCard" key={i}>
+              <div className="cardNum">0{i + 1}</div>
+              <h3>{item}</h3>
+              <p>Automated · Secured · Tracked</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section flowSection">
+        <h2>{t.flowTitle}</h2>
+        <div className="flow">
+          {t.flow.map((step, i) => (
+            <div className="flowItem" key={i}>
+              <div className="dot">{i + 1}</div>
+              <span>{step}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <h2>{t.servicesTitle}</h2>
+        <div className="serviceGrid">
+          {t.services.map((s, i) => (
+            <div className="service" key={i}>
+              <div className="serviceIcon">
+                {["🛂", "🧾", "💱", "🚘", "🚗", "🏨"][i]}
+              </div>
+              <h3>{s}</h3>
+              <p>Member dashboard required</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   );
 }
 
-function Stat({ label, value }) {
+/* ================= HERO VISUAL ================= */
+
+function HeroVisual() {
+  const rings = useMemo(() => Array.from({ length: 5 }), []);
+
   return (
-    <div className="stat">
-      <strong>{value}</strong>
-      <span>{label}</span>
+    <div className="visualBox">
+      <div className="globe">
+        {rings.map((_, i) => (
+          <span key={i} className={`ring r${i + 1}`} />
+        ))}
+        <div className="core">AI</div>
+      </div>
+
+      <div className="floatingCard cardA">
+        <b>Visa</b>
+        <span>Approved</span>
+      </div>
+      <div className="floatingCard cardB">
+        <b>Pickup</b>
+        <span>Driver assigned</span>
+      </div>
+      <div className="floatingCard cardC">
+        <b>Exchange</b>
+        <span>Ready</span>
+      </div>
     </div>
   );
 }
 
-function Auth({ type, t, lang, setLang, setPage }) {
-  const isLogin = type === "login";
+/* ================= LIVE ================= */
+
+function LivePanel({ t }) {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const names = ["KIM", "LEE", "PARK", "CHOI", "JUNG", "HAN"];
+    const actions = [
+      "Visa approved",
+      "Airport pickup assigned",
+      "Vehicle reserved",
+      "Exchange request verified",
+      "Accommodation matched",
+      "Customs form completed",
+    ];
+
+    const timer = setInterval(() => {
+      const item = {
+        name: names[Math.floor(Math.random() * names.length)],
+        action: actions[Math.floor(Math.random() * actions.length)],
+        time: new Date().toLocaleTimeString(),
+      };
+
+      setItems((prev) => [item, ...prev].slice(0, 6));
+    }, 1600);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <main className="app">
-      <Background />
-      <Header t={t} lang={lang} setLang={setLang} setPage={setPage} />
+    <section className="livePanel">
+      <div>
+        <h2>{t.liveTitle}</h2>
+        <p>Customer names are automatically masked for privacy.</p>
+      </div>
 
-      <section className="auth">
-        <button className="back" onClick={() => setPage("home")}>← {t.back}</button>
-        <h1>{isLogin ? t.login : t.signup}</h1>
+      <div className="feedBox">
+        {items.length === 0 && <div className="feed">AI system initializing...</div>}
 
-        {!isLogin && <input placeholder={t.name} />}
-        <input placeholder={t.email} />
-        {!isLogin && <input placeholder={t.phone} />}
-        <input placeholder={t.password} type="password" />
-
-        <button className="primary full" onClick={() => setPage("dashboard")}>
-          {isLogin ? t.loginGo : t.signupGo}
-        </button>
-
-        <button className="switch" onClick={() => setPage(isLogin ? "signup" : "login")}>
-          {isLogin ? t.signup : t.login}
-        </button>
-      </section>
-    </main>
-  );
-}
-
-function Dashboard({ t, lang, setLang, setPage, pulse }) {
-  return (
-    <main className="app">
-      <Background />
-      <Header t={t} lang={lang} setLang={setLang} setPage={setPage} />
-
-      <section className="dashHero">
-        <div>
-          <h1>{t.dashboard}</h1>
-          <p>{t.desc}</p>
-        </div>
-        <button className="primary" onClick={() => setPage("passport")}>{t.passport}</button>
-      </section>
-
-      <div className="serviceGrid">
-        {services[lang].map((s, i) => (
-          <div className={`service dash ${pulse === i ? "active" : ""}`} key={s}>
-            <b>{icons[i]}</b>
-            <strong>{s}</strong>
-            <span>{i === 0 ? t.upload : "READY"}</span>
+        {items.map((item, i) => (
+          <div className="feed" key={i}>
+            <span className="pulse" />
+            <b>{item.name} M***</b>
+            <span>{item.action}</span>
+            <small>{item.time}</small>
           </div>
         ))}
       </div>
+    </section>
+  );
+}
 
-      <Floating t={t} />
+/* ================= LOGIN ================= */
+
+function Login({ t, onLogin }) {
+  return (
+    <main className="loginPage">
+      <div className="loginCard">
+        <div className="badge">SECURE MEMBER ACCESS</div>
+        <h1>{t.loginTitle}</h1>
+
+        <input placeholder={t.email} />
+        <input placeholder={t.password} type="password" />
+
+        <button className="primary full" onClick={onLogin}>
+          {t.loginBtn} →
+        </button>
+      </div>
     </main>
   );
 }
 
-function Passport({ t, lang, setLang, setPage }) {
-  const [file, setFile] = useState("");
+/* ================= DASHBOARD ================= */
+
+function Dashboard({ t }) {
   return (
-    <main className="app">
-      <Background />
-      <Header t={t} lang={lang} setLang={setLang} setPage={setPage} />
+    <main className="dashboard">
+      <div className="dashHero">
+        <div>
+          <h1>{t.dashTitle}</h1>
+          <p>{t.dashSub}</p>
+        </div>
+        <div className="statusPill">AI ONLINE</div>
+      </div>
 
-      <section className="auth">
-        <button className="back" onClick={() => setPage("dashboard")}>← {t.back}</button>
-        <h1>{t.passport}</h1>
-        <p>{t.desc}</p>
-
-        <label className="upload">
-          <input type="file" accept="image/*,.pdf" onChange={(e) => setFile(e.target.files?.[0]?.name || "")} />
-          <strong>{file || t.upload}</strong>
-          <span>IMAGE / PDF</span>
-        </label>
-
-        <button className="primary full">{t.analyze}</button>
-      </section>
-
-      <Floating t={t} />
+      <div className="dashGrid">
+        {t.services.map((s, i) => (
+          <div className="dashCard" key={i}>
+            <div className="serviceIcon">
+              {["🛂", "🧾", "💱", "🚘", "🚗", "🏨"][i]}
+            </div>
+            <h3>{s}</h3>
+            <p>Application · Payment · Tracking</p>
+            <button>Start</button>
+          </div>
+        ))}
+      </div>
     </main>
   );
 }
 
-function Floating({ t }) {
-  return (
-    <div className="floating">
-      <button className="wa" onClick={() => window.open("https://wa.me/821027378821", "_blank")}>W</button>
-      <button className="ka" onClick={() => window.open("https://pf.kakao.com", "_blank")}>K</button>
-    </div>
-  );
+/* ================= CSS ================= */
+
+const css = `
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(0,229,255,.18), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(99,102,241,.22), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(16,185,129,.12), transparent 30%),
+    #020617;
+  color:white;
+  font-family:Inter,Arial,sans-serif;
 }
+
+button,input{font-family:inherit}
+
+.app{
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 44px;
+  backdrop-filter:blur(18px);
+  background:rgba(2,6,23,.72);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:0;
+  background:transparent;
+  color:white;
+  font-weight:900;
+  letter-spacing:.8px;
+  cursor:pointer;
+}
+
+.brandIcon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,#00e5ff,#6366f1);
+  box-shadow:0 0 28px rgba(0,229,255,.55);
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.nav button{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:white;
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+}
+
+.langs{
+  display:flex;
+  gap:6px;
+  padding:5px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+}
+
+.langs button{
+  padding:8px 11px;
+  border-radius:11px;
+}
+
+.langs .active{
+  background:#00e5ff;
+  color:#020617;
+  font-weight:900;
+}
+
+.loginBtn{
+  background:linear-gradient(90deg,#00e5ff,#6366f1)!important;
+  color:#020617!important;
+  font-weight:900;
+}
+
+.hero{
+  width:100%;
+  min-height:680px;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:30px;
+  align-items:center;
+  padding:80px 70px 40px;
+}
+
+.badge{
+  display:inline-flex;
+  padding:9px 14px;
+  border-radius:999px;
+  color:#67e8f9;
+  background:rgba(0,229,255,.08);
+  border:1px solid rgba(103,232,249,.25);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1.4px;
+}
+
+.hero h1{
+  margin:24px 0 18px;
+  font-size:64px;
+  line-height:1.03;
+  letter-spacing:-3px;
+  max-width:900px;
+}
+
+.hero p{
+  max-width:760px;
+  font-size:20px;
+  line-height:1.65;
+  color:rgba(255,255,255,.72);
+}
+
+.heroActions{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-top:30px;
+  flex-wrap:wrap;
+}
+
+.primary{
+  border:0;
+  padding:17px 28px;
+  border-radius:18px;
+  background:linear-gradient(90deg,#00e5ff,#38bdf8,#6366f1);
+  color:#020617;
+  font-weight:950;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 0 36px rgba(0,229,255,.35);
+}
+
+.trust{
+  color:#86efac;
+  font-weight:700;
+}
+
+.visualBox{
+  position:relative;
+  height:560px;
+  display:grid;
+  place-items:center;
+}
+
+.globe{
+  position:relative;
+  width:360px;
+  height:360px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle, rgba(0,229,255,.35), rgba(99,102,241,.1) 45%, transparent 70%);
+  box-shadow:
+    0 0 80px rgba(0,229,255,.28),
+    inset 0 0 80px rgba(255,255,255,.05);
+  animation:float 4s ease-in-out infinite;
+}
+
+.core{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:36px;
+  font-weight:1000;
+  background:rgba(2,6,23,.8);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 0 60px rgba(0,229,255,.55);
+}
+
+.ring{
+  position:absolute;
+  inset:18px;
+  border:1px solid rgba(103,232,249,.28);
+  border-radius:50%;
+  animation:spin 8s linear infinite;
+}
+
+.r2{inset:50px; transform:rotateX(70deg)}
+.r3{inset:80px; transform:rotateY(65deg)}
+.r4{inset:115px; transform:rotateX(55deg)}
+.r5{inset:-18px; border-color:rgba(99,102,241,.25)}
+
+.floatingCard{
+  position:absolute;
+  min-width:165px;
+  padding:16px;
+  border-radius:22px;
+  background:rgba(15,23,42,.74);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  backdrop-filter:blur(18px);
+}
+
+.floatingCard b{display:block;font-size:18px}
+.floatingCard span{color:#67e8f9;font-size:13px}
+
+.cardA{top:80px;left:40px}
+.cardB{right:30px;top:220px}
+.cardC{bottom:80px;left:100px}
+
+.livePanel{
+  margin:20px 70px 0;
+  padding:28px;
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:20px;
+  border-radius:34px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(20px);
+}
+
+.livePanel h2,.section h2{
+  margin:0 0 12px;
+  font-size:34px;
+}
+
+.livePanel p{
+  color:rgba(255,255,255,.65);
+}
+
+.feedBox{
+  display:grid;
+  gap:10px;
+}
+
+.feed{
+  display:grid;
+  grid-template-columns:auto 110px 1fr auto;
+  align-items:center;
+  gap:12px;
+  padding:13px 16px;
+  border-radius:18px;
+  background:rgba(2,6,23,.62);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.feed small{color:rgba(255,255,255,.45)}
+
+.pulse{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 18px #22c55e;
+}
+
+.section{
+  padding:80px 70px 20px;
+}
+
+.whyGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.glassCard,.service,.dashCard,.loginCard{
+  border-radius:28px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(18px);
+  box-shadow:0 20px 80px rgba(0,0,0,.25);
+}
+
+.glassCard{
+  padding:26px;
+}
+
+.cardNum{
+  color:#67e8f9;
+  font-weight:1000;
+  margin-bottom:16px;
+}
+
+.glassCard h3,.service h3,.dashCard h3{
+  margin:0 0 10px;
+  font-size:22px;
+}
+
+.glassCard p,.service p,.dashCard p{
+  color:rgba(255,255,255,.58);
+}
+
+.flowSection{
+  padding-top:60px;
+}
+
+.flow{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+}
+
+.flowItem{
+  min-height:120px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:14px;
+  padding:18px;
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(0,229,255,.1),rgba(255,255,255,.04));
+  border:1px solid rgba(103,232,249,.18);
+}
+
+.dot{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#00e5ff;
+  color:#020617;
+  font-weight:1000;
+}
+
+.serviceGrid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:16px;
+}
+
+.service{
+  padding:24px;
+  min-height:210px;
+}
+
+.serviceIcon{
+  font-size:34px;
+  margin-bottom:18px;
+}
+
+.loginPage{
+  min-height:calc(100vh - 75px);
+  display:grid;
+  place-items:center;
+  padding:40px;
+}
+
+.loginCard{
+  width:min(480px,100%);
+  padding:38px;
+}
+
+.loginCard h1{
+  font-size:42px;
+  margin:22px 0;
+}
+
+.loginCard input{
+  width:100%;
+  margin-bottom:14px;
+  padding:17px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(2,6,23,.65);
+  color:white;
+  outline:0;
+}
+
+.full{
+  width:100%;
+  margin-top:10px;
+}
+
+.dashboard{
+  padding:70px;
+}
+
+.dashHero{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  padding:34px;
+  border-radius:34px;
+  background:linear-gradient(135deg,rgba(0,229,255,.13),rgba(99,102,241,.12));
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.dashHero h1{
+  margin:0 0 10px;
+  font-size:48px;
+}
+
+.dashHero p{
+  color:rgba(255,255,255,.65);
+}
+
+.statusPill{
+  padding:14px 18px;
+  border-radius:999px;
+  color:#020617;
+  background:#22c55e;
+  font-weight:1000;
+  box-shadow:0 0 30px rgba(34,197,94,.45);
+}
+
+.dashGrid{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.dashCard{
+  padding:26px;
+}
+
+.dashCard button{
+  margin-top:20px;
+  width:100%;
+  padding:13px;
+  border-radius:15px;
+  border:0;
+  background:rgba(255,255,255,.1);
+  color:white;
+  cursor:pointer;
+}
+
+@keyframes spin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-18px)}
+}
+
+@media(max-width:1100px){
+  .hero{
+    grid-template-columns:1fr;
+    padding:50px 24px;
+  }
+
+  .hero h1{
+    font-size:42px;
+  }
+
+  .visualBox{
+    height:420px;
+  }
+
+  .livePanel,.section,.dashboard{
+    margin:0;
+    padding:40px 24px;
+  }
+
+  .livePanel{
+    grid-template-columns:1fr;
+  }
+
+  .whyGrid,.dashGrid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .serviceGrid,.flow{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:700px){
+  .header{
+    padding:14px;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .nav{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .hero h1{
+    font-size:34px;
+    letter-spacing:-1.5px;
+  }
+
+  .whyGrid,.dashGrid,.serviceGrid,.flow{
+    grid-template-columns:1fr;
+  }
+
+  .globe{
+    width:270px;
+    height:270px;
+  }
+
+  .floatingCard{
+    display:none;
+  }
+
+  .feed{
+    grid-template-columns:auto 1fr;
+  }
+
+  .feed small{
+    display:none;
+  }
+}
+`;
