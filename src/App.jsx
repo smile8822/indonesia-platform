@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const TEXT = {
   KR: {
     home: "홈",
     login: "로그인",
     dash: "마이페이지",
-    badge: "INDONESIA AI ENTRY SYSTEM",
+    badge: "INDONESIA AI ENTRY AUTOMATION",
     title: "AI가 인도네시아 입국부터 정착까지 자동 처리합니다",
     sub: "비자 · 세관신고 · 환전 · 공항픽업 · 차량렌트 · 숙소 · 알림 · 기록보관까지 하나의 플랫폼에서 실행됩니다.",
     start: "여권으로 시작하기",
@@ -19,14 +19,7 @@ const TEXT = {
     email: "이메일",
     password: "비밀번호",
     enter: "입장하기",
-    reasons: [
-      "AI 서류 자동 분석",
-      "실시간 진행 추적",
-      "고객명 보호 표시",
-      "온체인 기록 저장",
-      "만료 후 자동 삭제",
-      "다국어 자동 알림",
-    ],
+    reasons: ["AI 서류 자동 분석", "실시간 진행 추적", "고객명 보호 표시", "온체인 기록 저장", "만료 후 자동 삭제", "다국어 자동 알림"],
     flowSteps: ["여권 업로드", "AI 분석", "서류 분류", "결제", "담당자 배정", "완료"],
     services: ["비자 신청", "세관 신고", "환전 신청", "공항 픽업", "차량 렌트", "숙소 예약"],
   },
@@ -34,7 +27,7 @@ const TEXT = {
     home: "Home",
     login: "Login",
     dash: "Dashboard",
-    badge: "INDONESIA AI ENTRY SYSTEM",
+    badge: "INDONESIA AI ENTRY AUTOMATION",
     title: "AI automates your arrival and settlement in Indonesia",
     sub: "Visa, customs, exchange, airport pickup, car rental, accommodation, alerts and records in one platform.",
     start: "Start with Passport",
@@ -48,14 +41,7 @@ const TEXT = {
     email: "Email",
     password: "Password",
     enter: "Enter",
-    reasons: [
-      "AI document analysis",
-      "Real-time tracking",
-      "Masked customer data",
-      "On-chain records",
-      "Auto deletion",
-      "Multilingual alerts",
-    ],
+    reasons: ["AI document analysis", "Real-time tracking", "Masked customer data", "On-chain records", "Auto deletion", "Multilingual alerts"],
     flowSteps: ["Passport Upload", "AI Scan", "Document Sorting", "Payment", "Agent Assigned", "Completed"],
     services: ["Visa", "Customs", "Exchange", "Airport Pickup", "Car Rental", "Accommodation"],
   },
@@ -63,7 +49,7 @@ const TEXT = {
     home: "Beranda",
     login: "Masuk",
     dash: "Dashboard",
-    badge: "SISTEM AI MASUK INDONESIA",
+    badge: "OTOMASI AI MASUK INDONESIA",
     title: "AI mengurus perjalanan dari masuk hingga menetap di Indonesia",
     sub: "Visa, bea cukai, penukaran uang, jemput bandara, sewa mobil, akomodasi, notifikasi dan arsip dalam satu platform.",
     start: "Mulai dengan Paspor",
@@ -77,14 +63,7 @@ const TEXT = {
     email: "Email",
     password: "Kata sandi",
     enter: "Masuk",
-    reasons: [
-      "Analisis dokumen AI",
-      "Pelacakan real-time",
-      "Nama pelanggan disamarkan",
-      "Catatan on-chain",
-      "Hapus otomatis",
-      "Notifikasi multibahasa",
-    ],
+    reasons: ["Analisis dokumen AI", "Pelacakan real-time", "Nama pelanggan disamarkan", "Catatan on-chain", "Hapus otomatis", "Notifikasi multibahasa"],
     flowSteps: ["Upload Paspor", "Analisis AI", "Sortir Dokumen", "Pembayaran", "Petugas Ditugaskan", "Selesai"],
     services: ["Visa", "Bea Cukai", "Penukaran Uang", "Jemput Bandara", "Sewa Mobil", "Akomodasi"],
   },
@@ -92,7 +71,7 @@ const TEXT = {
     home: "首页",
     login: "登录",
     dash: "我的页面",
-    badge: "印尼 AI 入境系统",
+    badge: "印尼 AI 入境自动化系统",
     title: "AI 自动处理从入境到定居的全部流程",
     sub: "签证、海关、换汇、机场接送、租车、住宿、通知和记录保存都在一个平台完成。",
     start: "用护照开始",
@@ -121,7 +100,7 @@ export default function App() {
   return (
     <div className="app">
       <style>{css}</style>
-      <div className="noise" />
+      <ParticleLayer />
 
       <header className="header">
         <button className="brand" onClick={() => setPage("home")}>
@@ -152,6 +131,16 @@ export default function App() {
   );
 }
 
+function ParticleLayer() {
+  return (
+    <div className="particles">
+      {Array.from({ length: 36 }).map((_, i) => (
+        <span key={i} style={{ "--i": i }} />
+      ))}
+    </div>
+  );
+}
+
 function Home({ t, setPage }) {
   return (
     <>
@@ -160,6 +149,7 @@ function Home({ t, setPage }) {
           <div className="superBadge">{t.badge}</div>
           <h1>{t.title}</h1>
           <p>{t.sub}</p>
+
           <div className="heroBtns">
             <button className="primary" onClick={() => setPage("login")}>
               {t.start} →
@@ -168,18 +158,7 @@ function Home({ t, setPage }) {
           </div>
         </div>
 
-        <div className="aiStage">
-          <div className="halo h1" />
-          <div className="halo h2" />
-          <div className="halo h3" />
-          <div className="planet">
-            <div className="gridLine" />
-            <div className="core">AI</div>
-          </div>
-          <div className="tag t1"><b>Visa</b><span>Approved</span></div>
-          <div className="tag t2"><b>Pickup</b><span>Driver assigned</span></div>
-          <div className="tag t3"><b>Exchange</b><span>Ready</span></div>
-        </div>
+        <AIWorld />
       </section>
 
       <Live t={t} />
@@ -225,6 +204,41 @@ function Home({ t, setPage }) {
   );
 }
 
+function AIWorld() {
+  return (
+    <div className="worldStage">
+      <div className="orbit orbit1" />
+      <div className="orbit orbit2" />
+      <div className="orbit orbit3" />
+
+      <div className="earth">
+        <div className="earthGlow" />
+        <div className="earthGrid" />
+        <div className="earthCore">AI</div>
+      </div>
+
+      <div className="scanLine" />
+
+      <div className="tag tag1">
+        <b>Visa</b>
+        <span>Approved</span>
+      </div>
+      <div className="tag tag2">
+        <b>Pickup</b>
+        <span>Driver assigned</span>
+      </div>
+      <div className="tag tag3">
+        <b>Exchange</b>
+        <span>Ready</span>
+      </div>
+      <div className="tag tag4">
+        <b>Records</b>
+        <span>On-chain</span>
+      </div>
+    </div>
+  );
+}
+
 function Live({ t }) {
   const [feed, setFeed] = useState([]);
 
@@ -233,15 +247,17 @@ function Live({ t }) {
     const acts = ["Visa approved", "Customs completed", "Pickup assigned", "Vehicle reserved", "Exchange verified", "Room matched"];
 
     const timer = setInterval(() => {
-      setFeed((p) => [
-        {
-          name: names[Math.floor(Math.random() * names.length)],
-          act: acts[Math.floor(Math.random() * acts.length)],
-          time: new Date().toLocaleTimeString(),
-        },
-        ...p,
-      ].slice(0, 6));
-    }, 1500);
+      setFeed((p) =>
+        [
+          {
+            name: names[Math.floor(Math.random() * names.length)],
+            act: acts[Math.floor(Math.random() * acts.length)],
+            time: new Date().toLocaleTimeString(),
+          },
+          ...p,
+        ].slice(0, 6)
+      );
+    }, 1400);
 
     return () => clearInterval(timer);
   }, []);
@@ -252,6 +268,7 @@ function Live({ t }) {
         <h2>{t.live}</h2>
         <p>Customer names are masked automatically.</p>
       </div>
+
       <div className="feedList">
         {feed.map((f, i) => (
           <div className="feed" key={i}>
@@ -317,42 +334,67 @@ const css = `
 *{box-sizing:border-box}
 body{
   margin:0;
-  background:#030712;
+  background:#020617;
   color:white;
   font-family:Inter,Arial,sans-serif;
 }
 button,input{font-family:inherit}
 .app{
   min-height:100vh;
-  background:
-    radial-gradient(circle at 15% 15%,rgba(0,245,255,.26),transparent 28%),
-    radial-gradient(circle at 85% 10%,rgba(124,58,237,.28),transparent 30%),
-    radial-gradient(circle at 50% 90%,rgba(16,185,129,.18),transparent 34%),
-    linear-gradient(180deg,#020617,#030712 45%,#000);
+  position:relative;
   overflow-x:hidden;
+  background:
+    radial-gradient(circle at 12% 20%,rgba(0,245,255,.24),transparent 28%),
+    radial-gradient(circle at 85% 15%,rgba(139,92,246,.28),transparent 30%),
+    radial-gradient(circle at 55% 90%,rgba(34,197,94,.14),transparent 34%),
+    linear-gradient(180deg,#020617,#030712 48%,#000);
 }
-.noise{
+.app:before{
+  content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  opacity:.12;
+  opacity:.11;
   background-image:
-    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:60px 60px;
+    linear-gradient(rgba(255,255,255,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px);
+  background-size:64px 64px;
   mask-image:linear-gradient(to bottom,black,transparent 88%);
+}
+.particles{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+.particles span{
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#67e8f9;
+  left:calc((var(--i) * 37px) % 100vw);
+  top:calc((var(--i) * 83px) % 100vh);
+  opacity:.35;
+  box-shadow:0 0 18px #67e8f9;
+  animation:particleMove calc(7s + (var(--i) * .2s)) linear infinite;
+}
+@keyframes particleMove{
+  from{transform:translateY(100vh) translateX(0)}
+  to{transform:translateY(-20vh) translateX(80px)}
 }
 .header{
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:30;
   height:78px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 56px;
   background:rgba(2,6,23,.58);
-  border-bottom:1px solid rgba(255,255,255,.11);
+  border-bottom:1px solid rgba(255,255,255,.12);
   backdrop-filter:blur(22px);
 }
 .brand{
@@ -379,8 +421,8 @@ button,input{font-family:inherit}
   display:grid;
   place-items:center;
   border-radius:15px;
-  background:linear-gradient(135deg,#00f5ff,#7c3aed);
-  box-shadow:0 0 36px rgba(0,245,255,.8);
+  background:linear-gradient(135deg,#00f5ff,#8b5cf6);
+  box-shadow:0 0 36px rgba(0,245,255,.7);
 }
 nav{
   display:flex;
@@ -390,7 +432,7 @@ nav{
 nav button{
   color:white;
   background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.14);
   border-radius:14px;
   padding:10px 13px;
   cursor:pointer;
@@ -406,24 +448,26 @@ nav .on{
   font-weight:1000;
 }
 .hero{
-  min-height:680px;
+  position:relative;
+  z-index:2;
+  min-height:700px;
   display:grid;
-  grid-template-columns:1.02fr .98fr;
+  grid-template-columns:1.04fr .96fr;
   align-items:center;
-  gap:30px;
+  gap:20px;
   padding:86px 70px 30px;
 }
 .superBadge{
   display:inline-flex;
   padding:10px 15px;
   border-radius:999px;
-  border:1px solid rgba(103,232,249,.35);
-  background:rgba(0,245,255,.09);
+  border:1px solid rgba(103,232,249,.38);
+  background:rgba(0,245,255,.1);
   color:#a5f3fc;
   font-size:12px;
   font-weight:1000;
   letter-spacing:1.6px;
-  box-shadow:0 0 28px rgba(0,245,255,.16);
+  box-shadow:0 0 28px rgba(0,245,255,.18);
 }
 .hero h1{
   margin:22px 0 18px;
@@ -431,11 +475,11 @@ nav .on{
   font-size:66px;
   line-height:1.02;
   letter-spacing:-3.5px;
-  text-shadow:0 0 40px rgba(103,232,249,.15);
+  text-shadow:0 0 40px rgba(103,232,249,.18);
 }
 .hero p{
   max-width:780px;
-  color:rgba(255,255,255,.72);
+  color:rgba(255,255,255,.74);
   font-size:20px;
   line-height:1.7;
 }
@@ -459,85 +503,112 @@ nav .on{
 }
 .secure{
   color:#86efac;
-  font-weight:800;
+  font-weight:900;
 }
-.aiStage{
+.worldStage{
   position:relative;
-  height:560px;
+  height:590px;
   display:grid;
   place-items:center;
+  perspective:1000px;
 }
-.planet{
+.earth{
   position:relative;
-  width:360px;
-  height:360px;
+  width:370px;
+  height:370px;
   border-radius:50%;
-  display:grid;
-  place-items:center;
+  transform-style:preserve-3d;
   background:
-    radial-gradient(circle at 35% 30%,rgba(255,255,255,.42),transparent 10%),
-    radial-gradient(circle,rgba(0,245,255,.35),rgba(124,58,237,.16) 42%,transparent 72%);
+    radial-gradient(circle at 30% 25%,rgba(255,255,255,.55),transparent 9%),
+    radial-gradient(circle at 38% 35%,rgba(103,232,249,.48),transparent 20%),
+    radial-gradient(circle at 62% 68%,rgba(139,92,246,.4),transparent 26%),
+    radial-gradient(circle,#082f49 0%,#020617 67%);
   box-shadow:
-    0 0 80px rgba(0,245,255,.42),
-    inset 0 0 90px rgba(255,255,255,.06);
-  animation:float 4s ease-in-out infinite;
+    inset -35px -35px 90px rgba(0,0,0,.75),
+    inset 24px 18px 70px rgba(103,232,249,.22),
+    0 0 90px rgba(0,245,255,.46),
+    0 0 160px rgba(139,92,246,.22);
+  animation:earthFloat 4s ease-in-out infinite, earthTilt 9s ease-in-out infinite;
 }
-.core{
+.earthGlow{
+  position:absolute;
+  inset:-18px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,245,255,.28),transparent 68%);
+  filter:blur(12px);
+}
+.earthGrid{
+  position:absolute;
+  inset:28px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:
+    0 0 0 42px rgba(255,255,255,.08),
+    0 0 0 84px rgba(255,255,255,.05),
+    0 0 0 126px rgba(255,255,255,.025);
+  animation:spin 12s linear infinite;
+}
+.earthCore{
+  position:absolute;
+  inset:0;
+  margin:auto;
   width:126px;
   height:126px;
   display:grid;
   place-items:center;
   border-radius:50%;
-  background:rgba(2,6,23,.8);
-  border:1px solid rgba(255,255,255,.2);
+  background:rgba(2,6,23,.82);
+  border:1px solid rgba(255,255,255,.22);
   font-size:40px;
   font-weight:1000;
-  box-shadow:inset 0 0 30px rgba(0,245,255,.18),0 0 50px rgba(0,245,255,.5);
+  box-shadow:inset 0 0 30px rgba(0,245,255,.18),0 0 56px rgba(0,245,255,.55);
 }
-.gridLine{
-  position:absolute;
-  inset:24px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.22);
-  box-shadow:
-    0 0 0 38px rgba(255,255,255,.08),
-    0 0 0 76px rgba(255,255,255,.055),
-    0 0 0 114px rgba(255,255,255,.035);
-  animation:spin 12s linear infinite;
-}
-.halo{
+.orbit{
   position:absolute;
   border-radius:50%;
-  border:1px solid rgba(103,232,249,.24);
+  border:1px solid rgba(103,232,249,.26);
+  transform-style:preserve-3d;
 }
-.h1{width:470px;height:470px;animation:spin 18s linear infinite}
-.h2{width:520px;height:280px;transform:rotate(-18deg);animation:pulse 3s ease-in-out infinite}
-.h3{width:280px;height:520px;transform:rotate(22deg);animation:pulse 4s ease-in-out infinite}
+.orbit1{width:520px;height:520px;animation:orbitA 14s linear infinite}
+.orbit2{width:600px;height:290px;transform:rotateX(68deg) rotateZ(-18deg);animation:orbitB 10s linear infinite}
+.orbit3{width:290px;height:600px;transform:rotateY(66deg) rotateZ(18deg);animation:orbitA 18s linear infinite reverse}
+.scanLine{
+  position:absolute;
+  width:520px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#67e8f9,transparent);
+  filter:drop-shadow(0 0 14px #67e8f9);
+  animation:scan 3s ease-in-out infinite;
+}
 .tag{
   position:absolute;
   min-width:170px;
   padding:17px;
   border-radius:22px;
-  background:rgba(2,6,23,.72);
-  border:1px solid rgba(255,255,255,.2);
+  background:rgba(2,6,23,.74);
+  border:1px solid rgba(255,255,255,.22);
   backdrop-filter:blur(20px);
-  box-shadow:0 24px 80px rgba(0,0,0,.42),0 0 28px rgba(0,245,255,.12);
+  box-shadow:0 24px 80px rgba(0,0,0,.45),0 0 28px rgba(0,245,255,.14);
+  animation:tagFloat 4s ease-in-out infinite;
 }
 .tag b{display:block;font-size:18px}
-.tag span{color:#67e8f9;font-size:13px;font-weight:800}
-.t1{top:80px;left:52px}
-.t2{right:34px;top:235px}
-.t3{left:110px;bottom:78px}
+.tag span{color:#67e8f9;font-size:13px;font-weight:900}
+.tag1{top:70px;left:50px}
+.tag2{right:20px;top:230px;animation-delay:.5s}
+.tag3{left:115px;bottom:70px;animation-delay:.9s}
+.tag4{right:100px;bottom:50px;animation-delay:1.2s}
 .liveBox{
+  position:relative;
+  z-index:2;
   margin:20px 70px 0;
   padding:34px;
   border-radius:38px;
   display:grid;
   grid-template-columns:.72fr 1.28fr;
   gap:24px;
-  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.035));
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 30px 100px rgba(0,0,0,.28);
+  background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 30px 100px rgba(0,0,0,.3);
   backdrop-filter:blur(24px);
 }
 .liveBox h2,.section h2{
@@ -545,9 +616,7 @@ nav .on{
   font-size:36px;
   letter-spacing:-1.3px;
 }
-.liveBox p{
-  color:rgba(255,255,255,.6);
-}
+.liveBox p{color:rgba(255,255,255,.62)}
 .feedList{display:grid;gap:10px}
 .feed{
   display:grid;
@@ -556,8 +625,8 @@ nav .on{
   align-items:center;
   padding:14px 16px;
   border-radius:18px;
-  border:1px solid rgba(255,255,255,.11);
-  background:rgba(2,6,23,.58);
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(2,6,23,.62);
 }
 .feed i{
   width:10px;
@@ -568,6 +637,8 @@ nav .on{
 }
 .feed small{color:rgba(255,255,255,.48)}
 .section{
+  position:relative;
+  z-index:2;
   padding:82px 70px 0;
 }
 .cards{
@@ -576,11 +647,21 @@ nav .on{
   gap:18px;
 }
 .card,.service,.dashCard,.loginCard{
-  background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.035));
-  border:1px solid rgba(255,255,255,.13);
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
+  border:1px solid rgba(255,255,255,.14);
   border-radius:30px;
   backdrop-filter:blur(22px);
-  box-shadow:0 28px 90px rgba(0,0,0,.28);
+  box-shadow:0 28px 90px rgba(0,0,0,.3);
+}
+.card:before,.service:before,.dashCard:before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background:linear-gradient(120deg,transparent,rgba(103,232,249,.18),transparent);
+  transform:translateX(-120%);
+  animation:shine 5s ease-in-out infinite;
 }
 .card{
   padding:28px;
@@ -595,7 +676,7 @@ nav .on{
   margin:18px 0 10px;
 }
 .card p,.service p,.dashCard p{
-  color:rgba(255,255,255,.58);
+  color:rgba(255,255,255,.6);
 }
 .timeline{
   display:grid;
@@ -606,8 +687,8 @@ nav .on{
   min-height:125px;
   border-radius:26px;
   padding:20px;
-  background:linear-gradient(180deg,rgba(0,245,255,.13),rgba(255,255,255,.035));
-  border:1px solid rgba(103,232,249,.22);
+  background:linear-gradient(180deg,rgba(0,245,255,.14),rgba(255,255,255,.035));
+  border:1px solid rgba(103,232,249,.23);
 }
 .step b{
   width:36px;
@@ -631,10 +712,10 @@ nav .on{
 .service div,.dashCard div{
   font-size:36px;
 }
-.bottom{
-  padding-bottom:80px;
-}
+.bottom{padding-bottom:80px}
 .loginPage{
+  position:relative;
+  z-index:2;
   min-height:calc(100vh - 78px);
   display:grid;
   place-items:center;
@@ -660,6 +741,8 @@ nav .on{
 }
 .full{width:100%;margin-top:8px}
 .dashboard{
+  position:relative;
+  z-index:2;
   padding:70px;
 }
 .dashTop{
@@ -676,9 +759,7 @@ nav .on{
   margin:0 0 12px;
   font-size:50px;
 }
-.dashTop p{
-  color:rgba(255,255,255,.68);
-}
+.dashTop p{color:rgba(255,255,255,.68)}
 .online{
   padding:15px 20px;
   border-radius:999px;
@@ -693,22 +774,34 @@ nav .on{
   grid-template-columns:repeat(3,1fr);
   gap:18px;
 }
-.dashCard{
-  padding:28px;
-}
+.dashCard{padding:28px}
 .dashCard button{
   margin-top:18px;
   width:100%;
   padding:14px;
   border:0;
   border-radius:16px;
-  background:rgba(255,255,255,.11);
+  background:rgba(255,255,255,.12);
   color:white;
   cursor:pointer;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes float{50%{transform:translateY(-20px)}}
-@keyframes pulse{50%{opacity:.35;filter:blur(1px)}}
+@keyframes earthFloat{50%{transform:translateY(-20px)}}
+@keyframes earthTilt{
+  0%,100%{rotate:0deg}
+  50%{rotate:2deg}
+}
+@keyframes orbitA{to{transform:rotate(360deg)}}
+@keyframes orbitB{to{transform:rotateX(68deg) rotateZ(342deg)}}
+@keyframes scan{
+  0%,100%{transform:translateY(-160px);opacity:.15}
+  50%{transform:translateY(160px);opacity:.9}
+}
+@keyframes tagFloat{50%{transform:translateY(-12px)}}
+@keyframes shine{
+  0%,70%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
 @media(max-width:1100px){
   .header{padding:0 20px}
   .hero{grid-template-columns:1fr;padding:54px 24px}
@@ -722,9 +815,9 @@ nav .on{
   .header{height:auto;padding:14px;flex-direction:column}
   nav{flex-wrap:wrap;justify-content:center}
   .hero h1{font-size:34px;letter-spacing:-1.6px}
-  .aiStage{height:420px}
-  .planet{width:260px;height:260px}
-  .halo,.tag{display:none}
+  .worldStage{height:420px}
+  .earth{width:260px;height:260px}
+  .orbit,.tag,.scanLine{display:none}
   .cards,.timeline,.serviceGrid,.dashGrid{grid-template-columns:1fr}
   .feed{grid-template-columns:auto 1fr}
   .feed small{display:none}
