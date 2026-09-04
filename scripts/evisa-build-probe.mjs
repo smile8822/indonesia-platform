@@ -88,7 +88,7 @@ for (const marker of [
   "upload-passport",
   "csrf_token",
   "$('#form')",
-  "$("#form")"
+  '$("#form")'
 ]) {
   const i = scripts.toLowerCase().indexOf(marker.toLowerCase());
   if (i >= 0) {
