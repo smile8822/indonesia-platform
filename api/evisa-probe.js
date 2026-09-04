@@ -1,79 +1,70 @@
 export default async function handler(_req, res) {
   const base = "https://evisa.imigrasi.go.id";
-  const pageUrl = base + "/web/visa-selection";
+  const selectionUrl = base + "/web/visa-selection";
+  const dataUrl = base + "/web/visa-selection/data";
   const ua = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36";
-  const headers = { "user-agent": ua, accept: "text/html,*/*" };
-  try {
-    const pageResponse = await fetch(pageUrl, { redirect: "follow", headers });
-    const html = await pageResponse.text();
-    const appResponse = await fetch(base + "/assets/js/app.js?x=1", {
-      headers: { ...headers, referer: pageUrl, accept: "*/*" },
-    });
-    const appJs = await appResponse.text();
-    const marker = "/web/generate";
-    const idx = appJs.indexOf(marker);
-    const generateContext = idx >= 0
-      ? appJs.slice(Math.max(0, idx - 2500), Math.min(appJs.length, idx + 3500))
-      : null;
+  const page = await fetch(selectionUrl, {
+    headers: { "user-agent": ua, accept: "text/html,*/*" },
+  });
+  const setCookies =
+    typeof page.headers.getSetCookie === "function"
+      ? page.headers.getSetCookie()
+      : page.headers.get("set-cookie")
+        ? [page.headers.get("set-cookie")]
+        : [];
+  const cookie = setCookies
+    .map((raw) => String(raw).split(";")[0])
+    .filter(Boolean)
+    .join("; ");
 
-    const selects = [...html.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/gi)].map((m) => {
-      const attrs = m[1];
-      const body = m[2];
-      const name = attrs.match(/\bname=["']([^"']+)["']/i)?.[1] ?? null;
-      const id = attrs.match(/\bid=["']([^"']+)["']/i)?.[1] ?? null;
-      const cls = attrs.match(/\bclass=["']([^"']+)["']/i)?.[1] ?? null;
-      const options = [...body.matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)]
-        .map((o) => ({
-          value: o[1].match(/\bvalue=["']([^"']*)["']/i)?.[1] ?? "",
-          text: o[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
-        }))
-        .slice(0, 80);
-      return { name, id, className: cls, options };
+  async function post(data) {
+    const response = await fetch(dataUrl, {
+      method: "POST",
+      headers: {
+        "user-agent": ua,
+        accept: "application/json,text/javascript,*/*;q=0.01",
+        "x-requested-with": "XMLHttpRequest",
+        referer: selectionUrl,
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        cookie,
+      },
+      body: new URLSearchParams(data),
     });
-
-    const inputs = [...html.matchAll(/<input\b([^>]*)>/gi)].map((m) => {
-      const attrs = m[1];
-      return {
-        type: attrs.match(/\btype=["']([^"']+)["']/i)?.[1] ?? "text",
-        name: attrs.match(/\bname=["']([^"']+)["']/i)?.[1] ?? null,
-        id: attrs.match(/\bid=["']([^"']+)["']/i)?.[1] ?? null,
-        value: attrs.match(/\bvalue=["']([^"']*)["']/i)?.[1] ?? null,
-      };
-    }).slice(0, 100);
-
-    const forms = [...html.matchAll(/<form\b([^>]*)>([\s\S]*?)<\/form>/gi)].map((m) => {
-      const attrs = m[1];
-      return {
-        action: attrs.match(/\baction=["']([^"']*)["']/i)?.[1] ?? null,
-        method: attrs.match(/\bmethod=["']([^"']*)["']/i)?.[1] ?? null,
-        id: attrs.match(/\bid=["']([^"']+)["']/i)?.[1] ?? null,
-        className: attrs.match(/\bclass=["']([^"']+)["']/i)?.[1] ?? null,
-        text: m[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 1200),
-      };
-    });
-
-    const inlineScripts = [...html.matchAll(/<script(?![^>]+src=)[^>]*>([\s\S]*?)<\/script>/gi)]
-      .map((m) => m[1])
-      .filter((s) => /generate|visa|country|passport|activity|length|payment/i.test(s))
-      .map((s) => s.slice(0, 12000))
-      .slice(0, 10);
-
-    res.status(200).json({
-      probe: "MISO_VERCEL_EVISA_SELECTION_DISCOVERY",
-      pageStatus: pageResponse.status,
-      appStatus: appResponse.status,
-      generateContext,
-      selects,
-      inputs,
-      forms,
-      inlineScripts,
-      vercelRegion: process.env.VERCEL_REGION ?? null,
-    });
-  } catch (error) {
-    res.status(200).json({
-      probe: "MISO_VERCEL_EVISA_SELECTION_DISCOVERY",
-      error: error instanceof Error ? error.message : String(error),
-      vercelRegion: process.env.VERCEL_REGION ?? null,
-    });
+    const text = await response.text();
+    let body = text;
+    try { body = JSON.parse(text); } catch {}
+    return { status: response.status, body };
   }
+
+  const parentId = "d5bc2168-2f4a-4396-8eae-3d895a0508e9";
+  const step0 = await post({ parent_id: parentId, step: "0" });
+  const activities = Array.isArray(step0.body?.data) ? step0.body.data : [];
+  const activity = activities.find((item) =>
+    /Tourism, Family Visit, and Transit/i.test(String(item?.name || "")),
+  );
+
+  let step1 = null;
+  let b1 = null;
+  let step2 = null;
+  if (activity?.id) {
+    step1 = await post({
+      activity_id: activity.id,
+      country_id: "0e63775f-7370-4203-9ff4-8a7ce1b83da5",
+      step: "1",
+    });
+    const visas = Array.isArray(step1.body?.data) ? step1.body.data : [];
+    b1 = visas.find((item) => /(^|\s)B1\b/i.test(String(item?.name || "")));
+    if (b1?.id) {
+      step2 = await post({ visa_type_id: b1.id, step: "2" });
+    }
+  }
+
+  res.status(200).json({
+    probe: "MISO_VERCEL_B1_SELECTION",
+    pageStatus: page.status,
+    activity,
+    b1,
+    step2,
+    region: process.env.VERCEL_REGION ?? null,
+  });
 }
