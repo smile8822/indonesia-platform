@@ -20,24 +20,24 @@ function absorb(headers) {
 function cookie() {
   return [...jar.entries()].map(([k, v]) => k + "=" + v).join("; ");
 }
+const common = {
+  "user-agent": ua,
+  accept: "text/html,*/*",
+};
 
-const page = await fetch(selectionUrl, {
-  headers: { "user-agent": ua, accept: "text/html,*/*" },
-});
+const page = await fetch(selectionUrl, { headers: common });
 absorb(page.headers);
 const html = await page.text();
-
-const countryOptions = [...html.matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)]
-  .map((match) => {
-    const attrs = match[1];
-    const text = match[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
-    const value = attrs.match(/\bvalue=["']([^"']*)["']/i)?.[1] ?? "";
-    return { value, text };
-  });
-const korea = countryOptions.find((item) => item.text === "REPUBLIC OF KOREA");
+const countryOptions = [...html.matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/gi)].map((m) => {
+  const attrs = m[1];
+  const text = m[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const value = attrs.match(/\bvalue=["']([^"']*)["']/i)?.[1] ?? "";
+  return { value, text };
+});
+const korea = countryOptions.find((x) => x.text === "REPUBLIC OF KOREA");
 
 async function post(data) {
-  const response = await fetch(dataUrl, {
+  const r = await fetch(dataUrl, {
     method: "POST",
     headers: {
       "user-agent": ua,
@@ -49,37 +49,20 @@ async function post(data) {
     },
     body: new URLSearchParams(data),
   });
-  absorb(response.headers);
-  return response.json();
+  absorb(r.headers);
+  return r.json();
 }
-
-const parentId = "d5bc2168-2f4a-4396-8eae-3d895a0508e9";
-const step0 = await post({ parent_id: parentId, step: "0" });
-const activity = step0.data.find((item) =>
-  /Tourism, Family Visit, and Transit/i.test(String(item.name || "")),
-);
-const step1 = await post({
-  activity_id: activity.id,
-  country_id: korea.value,
-  step: "1",
-});
-const b1 = step1.data.find((item) => /(^|\s)B1\b/i.test(String(item.name || "")));
+const step0 = await post({ parent_id: "d5bc2168-2f4a-4396-8eae-3d895a0508e9", step: "0" });
+const activity = step0.data.find((x) => /Tourism, Family Visit, and Transit/i.test(String(x.name || "")));
+const step1 = await post({ activity_id: activity.id, country_id: korea.value, step: "1" });
+const b1 = step1.data.find((x) => /(^|\s)B1\b/i.test(String(x.name || "")));
 const step2 = await post({ visa_type_id: b1.id, step: "2" });
-const stay = step2.data.limitedStay.find((item) => String(item.value) === "30");
+const stay = step2.data.limitedStay.find((x) => String(x.value) === "30");
 
-const step1Url =
-  base +
-  "/web/application_add/visa/" +
-  b1.id +
-  "/" +
-  stay.id +
-  "/" +
-  activity.id +
-  "/step_1";
+const step1Url = base + "/web/application_add/visa/" + b1.id + "/" + stay.id + "/" + activity.id + "/step_1";
 const formResponse = await fetch(step1Url, {
   headers: {
-    "user-agent": ua,
-    accept: "text/html,*/*",
+    ...common,
     referer: selectionUrl,
     cookie: cookie(),
   },
@@ -88,33 +71,38 @@ const formResponse = await fetch(step1Url, {
 absorb(formResponse.headers);
 const formHtml = await formResponse.text();
 
-const inputs = [...formHtml.matchAll(/<input\b([^>]*)>/gi)].map((match) => {
-  const attrs = match[1];
-  const read = (name) =>
-    attrs.match(new RegExp("\\b" + name + "=[\\\"']([^\\\"']*)[\\\"']", "i"))?.[1] ?? null;
-  return {
-    type: read("type") ?? "text",
-    name: read("name"),
-    id: read("id"),
-    accept: read("accept"),
-    required: /\brequired\b/i.test(attrs),
-  };
-});
-const forms = [...formHtml.matchAll(/<form\b([^>]*)>/gi)].map((match) => {
-  const attrs = match[1];
-  const read = (name) =>
-    attrs.match(new RegExp("\\b" + name + "=[\\\"']([^\\\"']*)[\\\"']", "i"))?.[1] ?? null;
-  return {
-    action: read("action"),
-    method: read("method"),
-    enctype: read("enctype"),
-    id: read("id"),
-  };
-});
+const scripts = [...formHtml.matchAll(/<script(?![^>]+src=)[^>]*>([\s\S]*?)<\/script>/gi)]
+  .map((m) => m[1])
+  .join("\n")
+  .replace(/\s+/g, " ");
 
-console.log("MISO_EVISA_KOREA=" + JSON.stringify(korea));
-console.log("MISO_EVISA_B1=" + JSON.stringify({ activity, b1, stay }));
-console.log("MISO_EVISA_STEP1_STATUS=" + formResponse.status);
-console.log("MISO_EVISA_STEP1_FINAL_URL=" + formResponse.url);
-console.log("MISO_EVISA_STEP1_FORMS=" + JSON.stringify(forms));
-console.log("MISO_EVISA_STEP1_INPUTS=" + JSON.stringify(inputs));
+for (const marker of [
+  "passport-attachment",
+  "path_attachment",
+  "path_attachment_crop",
+  "initial_file",
+  "picture",
+  "path_photo",
+  "FormData",
+  "step_2",
+  "upload-passport",
+  "csrf_token",
+  "$('#form')",
+  "$("#form")"
+]) {
+  const i = scripts.toLowerCase().indexOf(marker.toLowerCase());
+  if (i >= 0) {
+    console.log("MISO_EVISA_STEP1_CTX_" + marker.replace(/[^a-z0-9]+/gi, "_") + "=" +
+      scripts.slice(Math.max(0, i - 2500), Math.min(scripts.length, i + 7000)));
+  }
+}
+
+const buttons = [...formHtml.matchAll(/<(?:button|a)\b([^>]*)>([\s\S]*?)<\/(?:button|a)>/gi)]
+  .map((m) => {
+    const attrs = m[1];
+    const text = m[2].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const read = (name) => attrs.match(new RegExp("\\b" + name + "=[\\\"']([^\\\"']*)[\\\"']", "i"))?.[1] ?? null;
+    return { id: read("id"), href: read("href"), type: read("type"), text };
+  })
+  .filter((x) => x.text || x.id);
+console.log("MISO_EVISA_STEP1_BUTTONS=" + JSON.stringify(buttons));
