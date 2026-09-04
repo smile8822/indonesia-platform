@@ -7,6 +7,10 @@
     {
       "source": "/b1-readiness",
       "destination": "/api/b1-readiness"
+    },
+    {
+      "source": "/b1/prepare",
+      "destination": "/api/b1-prepare"
     }
   ]
 }
