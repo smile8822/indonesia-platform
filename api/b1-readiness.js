@@ -92,11 +92,13 @@ async function postSelection(jar, payload) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.setHeader("allow", "POST");
+  if (req.method !== "GET" && req.method !== "POST") {
+    res.setHeader("allow", "GET, POST");
     return res.status(405).json({ error: "METHOD_NOT_ALLOWED" });
   }
-  const country = normalize(req.body?.country ?? "REPUBLIC OF KOREA");
+  const requestedCountry =
+    req.method === "GET" ? req.query?.country : req.body?.country;
+  const country = normalize(requestedCountry ?? "REPUBLIC OF KOREA");
   if (!country) return res.status(400).json({ error: "COUNTRY_REQUIRED" });
 
   try {
